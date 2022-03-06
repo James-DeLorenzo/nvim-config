@@ -1,0 +1,19 @@
+vim.o.syntax = 'enable'
+vim.o.signcolumn = 'yes'
+vim.o.background = 'dark'
+vim.o.termguicolors = true
+vim.cmd('colorscheme dracula')
+vim.o.number = true
+vim.o.relativenumber = true
+vim.o.mouse = 'a'
+vim.o.mousefocus = true
+vim.o.foldmethod = "marker"
+vim.o.ts = 4
+vim.o.hls = true
+vim.o.wrap = false
+vim.o.so = 3
+vim.o.shiftwidth = 4
+vim.o.softtabstop = -1
+vim.o.expandtab = true
+vim.o.confirm = true
+vim.opt.completeopt = {'menu', 'menuone', 'preview', 'noselect', 'noinsert'}
