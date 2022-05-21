@@ -1,50 +1,34 @@
-local lsp_installer = require("nvim-lsp-installer")
-local cmp_lsp = require('cmp_nvim_lsp')
--- Register a handler that will be called for all installed servers.
--- Alternatively, you may also register handlers on specific server instances instead (see example below).
-lsp_installer.on_server_ready(function(server)
-    -- Setup lspconfig.
-    local capabilities = cmp_lsp.update_capabilities(vim.lsp.protocol.make_client_capabilities())
-    local opts = {}
-
-    -- (optional) Customize the options passed to the server
-    -- if server.name == "tsserver" then
-    --     opts.root_dir = function() ... end
-    -- end
-    if server.name == "sumneko_lua" then
-        opts = {
-            settings = {
-                Lua = {
-                   diagnostics = {
-                      globals = {'vim'}
-                  }
-                }
-            }
+require("nvim-lsp-installer").setup {
+    log_level = vim.log.levels.DEBUG
+}
+local lspconfig = require("lspconfig")
+lspconfig.sumneko_lua.setup {
+    settings = {
+        Lua = {
+           diagnostics = {
+              globals = {'vim'}
+          }
         }
-    end
-    if server.name == "pyright" then
-        opts = {
-            settings = {
-                python = {
-                    venvPath = "/Users/jamesdelorenzo/.virtualenvs"
-                }
-            }
+    }
+}
+lspconfig.pyright.setup {
+    settings = {
+        python = {
+            venvPath = "/Users/jamesdelorenzo/.virtualenvs"
         }
-    end
-    if server.name == "ccls" then
-        opts = {
-            init_options = {
-                cache = {
-                    directory = ".ccls-cache";
-                }
-             }
-         }
-    end
+    }
+}
+lspconfig.ccls.setup {
+    init_options = {
+        cache = {
+            directory = ".ccls-cache";
+        }
+    }
+}
+lspconfig.terraformls.setup {}
+lspconfig.tflint.setup {}
+lspconfig.jsonls.setup {}
+lspconfig.dockerls.setup {}
+lspconfig.yamlls.setup {}
+lspconfig.clangd.setup {}
 
-    -- This setup() function is exactly the same as lspconfig's setup function.
-    -- Refer to https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
--- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
-    opts['capabilities']  = capabilities
-
-    server:setup(opts)
-end)

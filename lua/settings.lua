@@ -3,8 +3,6 @@ vim.o.signcolumn = 'yes'
 vim.o.background = 'dark'
 vim.o.colorcolumn = "80,120"
 vim.o.termguicolors = true
-vim.cmd('colorscheme bluloco_custom')
-
 
 vim.o.number = true
 vim.o.relativenumber = true
@@ -18,6 +16,7 @@ vim.o.scrolloff = 3
 vim.o.hidden = true
 vim.o.cmdheight = 2
 vim.opt.iskeyword:append({'-'})
+vim.opt.nrformats:append({'unsigned'})
 -- tab stuffs
 vim.o.tabstop = 4
 vim.o.shiftwidth = 4
@@ -37,4 +36,6 @@ vim.opt.formatoptions:remove({'o'})
 
 vim.o.updatetime = 300
 vim.o.timeoutlen = 500
+
+vim.o.laststatus = 3
 

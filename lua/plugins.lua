@@ -1,7 +1,7 @@
 return require('packer').startup(function(use)
     -- basic vim plugins {{{
     use 'tpope/vim-sensible'
-    use 'tpope/vim-commentary'
+    -- use 'tpope/vim-commentary'
     use {
         'matze/vim-move',
         config = function ()
@@ -9,10 +9,15 @@ return require('packer').startup(function(use)
         end
     }
     -- context {{{
-    -- use {'wellle/context.vim', disable = true }
+    use {
+        'wellle/context.vim',
+        config = function () 
+            vim.api.nvim_set_var('context_enabled', 0)
+        end
+    }
     -- }}}
     -- }}}
-    -- basic nvim plugins {{{
+     -- basic nvim plugins {{{
     use 'wbthomason/packer.nvim'
     use 'kyazdani42/nvim-web-devicons'
     use 'ggandor/lightspeed.nvim'
@@ -36,6 +41,14 @@ return require('packer').startup(function(use)
           }
         end
     }
+    use {
+        'numToStr/Comment.nvim',
+        config = function()
+            require('Comment').setup {}
+            local ft = require('Comment.ft')
+            ft.set('terraform', '#%s')
+        end
+    }
     -- colorizer {{{
     use {
         'norcalli/nvim-colorizer.lua',
@@ -47,6 +60,7 @@ return require('packer').startup(function(use)
     -- which-key {{{
     use {
         'folke/which-key.nvim',
+        disable = false,
         config = function()
             require('which-key').setup{}
         end
@@ -110,7 +124,10 @@ return require('packer').startup(function(use)
     use {
         -- 'james-delorenzo/bluloco.nvim',
         '~/workspaces/bluloco.nvim',
-        requires = {'rktjmp/lush.nvim'}
+        requires = {'rktjmp/lush.nvim'},
+        config = function ()
+            vim.cmd('colorscheme bluloco_custom')
+        end
     }
     -- }}}
     -- feline {{{
@@ -211,68 +228,12 @@ return require('packer').startup(function(use)
 
     -- }}}
     -- LSP Stuffs {{{
-    -- Lsp installer {{{
+    -- Lsp Config & installer {{{
     use {
         'williamboman/nvim-lsp-installer',
-        -- config = function()
-        --    local lsp_installer = require("nvim-lsp-installer")
-
-        --     -- Register a handler that will be called for all installed servers.
-        --     -- Alternatively, you may also register handlers on specific server instances instead (see example below).
-        --     lsp_installer.on_server_ready(function(server)
-        --         -- Setup lspconfig.
-        --         local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
-        --         local opts = {}
-
-        --         -- (optional) Customize the options passed to the server
-        --         -- if server.name == "tsserver" then
-        --         --     opts.root_dir = function() ... end
-        --         -- end
-        --         if server.name == "sumneko_lua" then
-        --             opts = {
-        --                 settings = {
-        --                     Lua = {
-        --                        diagnostics = {
-        --                           globals = {'vim'}
-        --                       }
-        --                     }
-        --                 }
-        --             }
-        --         end
-        --         if server.name == "pyright" then
-        --             opts = {
-        --                 settings = {
-        --                     python = {
-        --                         venvPath = "/Users/jamesdelorenzo/.virtualenvs"
-        --                     }
-        --                 }
-        --             }
-        --         end
-        --         -- This setup() function is exactly the same as lspconfig's setup function.
-        --         -- Refer to https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
-        --     -- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
-        --     require('lspconfig')['<YOUR_LSP_SERVER>'].setup {
-        --         capabilities = capabilities
-        --     }
-        --         server:setup(opts)
-        --     end)
-        -- end
-    }
-    -- }}}
-    -- LSP config {{{
-    use {
-        'neovim/nvim-lspconfig',
-        -- config = function()
-            -- local lspconfig = require("lspconfig")
-            -- for arch ccls is managed with yay
-            -- lspconfig.ccls.setup {
-            --     init_options = {
-            --          cache = {
-            --           directory = ".ccls-cache";
-            --          }
-            --      }
-            -- }
-        -- end
+        requires = {
+            "neovim/nvim-lspconfig"
+        }
     }
     -- }}}
     -- LSP Saga {{{
