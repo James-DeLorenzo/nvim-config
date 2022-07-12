@@ -11,5 +11,3 @@ vim.cmd([[
         autocmd BufWritePost keybinds.lua source <afile>
     augroup end
 ]])
-
-

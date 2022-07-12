@@ -58,8 +58,8 @@ utils.inoremap('<Right>', '<Nop>')
 utils.nmap('<Space>', '<Nop>')
 vim.g.mapleader = " "
 
-utils.nnoremap('<F3>', '<CMD>lua require("FTerm").toggle()<CR>', {silent = true})
-utils.tnoremap('<F3>', '<C-\\><C-n><CMD>lua require("FTerm").toggle()<CR>', { silent = true })
+-- utils.nnoremap('<F3>', '<CMD>lua require("FTerm").toggle()<CR>', {silent = true})
+-- utils.tnoremap('<F3>', '<C-\\><C-n><CMD>lua require("FTerm").toggle()<CR>', { silent = true })
 
 -- lspSaga stuffs {{{
 utils.nnoremap('gh', '<CMD>Lspsaga lsp_finder<CR>', { silent = true })

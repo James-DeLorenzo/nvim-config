@@ -4,20 +4,20 @@ return require('packer').startup(function(use)
     -- use 'tpope/vim-commentary'
     use {
         'matze/vim-move',
-        config = function ()
+        config = function()
             vim.api.nvim_set_var('move_key_modifier', 'C')
         end
     }
     -- context {{{
     use {
         'wellle/context.vim',
-        config = function () 
+        config = function()
             vim.api.nvim_set_var('context_enabled', 0)
         end
     }
     -- }}}
     -- }}}
-     -- basic nvim plugins {{{
+    -- basic nvim plugins {{{
     use 'wbthomason/packer.nvim'
     use 'kyazdani42/nvim-web-devicons'
     use 'ggandor/lightspeed.nvim'
@@ -26,19 +26,19 @@ return require('packer').startup(function(use)
     use {
         'windwp/nvim-autopairs',
         config = function()
-            require('nvim-autopairs').setup{}
+            require('nvim-autopairs').setup {}
         end
     }
     use {
         'lewis6991/gitsigns.nvim',
         requires = {
-          'nvim-lua/plenary.nvim'
+            'nvim-lua/plenary.nvim'
         },
         config = function()
-          require('gitsigns').setup {
-              signcolumn = true,
-              numhl = false,
-          }
+            require('gitsigns').setup {
+                signcolumn = true,
+                numhl = false,
+            }
         end
     }
     use {
@@ -53,7 +53,7 @@ return require('packer').startup(function(use)
     use {
         'norcalli/nvim-colorizer.lua',
         config = function()
-            require('colorizer').setup( { '*'; }, { names = false; RRGGBBAA = true; })
+            require('colorizer').setup({ '*'; }, { names = false; RRGGBBAA = true; })
         end
     }
     -- }}}
@@ -62,7 +62,7 @@ return require('packer').startup(function(use)
         'folke/which-key.nvim',
         disable = false,
         config = function()
-            require('which-key').setup{}
+            require('which-key').setup {}
         end
     }
     -- }}}
@@ -70,33 +70,13 @@ return require('packer').startup(function(use)
     -- buffer line stuff {{{
     use {
         'romgrk/barbar.nvim',
-        requires = {'kyazdani42/nvim-web-devicons'},
-        config = function ()
+        requires = { 'kyazdani42/nvim-web-devicons' },
+        config = function()
             vim.g.bufferline = {
                 closable = false,
                 insert_at_end = true,
                 semantic_letters = true,
             }
-        end
-    }
-    -- }}}
-    -- nvim-tree {{{
-    use {
-        'kyazdani42/nvim-tree.lua',
-        disable = true,
-        requires = {
-            'kyazdani42/nvim-web-devicons'
-        },
-        config = function()
-            require('nvim-tree').setup{
-                view = {
-                    auto_resize = true,
-                    side = 'right'
-                }
-            }
-            vim.g.nvim_tree_indent_markers = true
-            vim.g.nvim_tree_add_trailing = true
-            vim.g.nvim_tree_group_empty = true
         end
     }
     -- }}}
@@ -124,8 +104,8 @@ return require('packer').startup(function(use)
     use {
         -- 'james-delorenzo/bluloco.nvim',
         '~/workspaces/bluloco.nvim',
-        requires = {'rktjmp/lush.nvim'},
-        config = function ()
+        requires = { 'rktjmp/lush.nvim' },
+        config = function()
             vim.cmd('colorscheme bluloco_custom')
         end
     }
@@ -136,13 +116,6 @@ return require('packer').startup(function(use)
         requires = {
             {
                 '~/workspaces/bluloco.nvim'
-            },
-            {
-                'SmiteshP/nvim-gps',
-                requires = {'nvim-treesitter/nvim-treesitter'},
-                config = function()
-                    require('nvim-gps').setup()
-                end
             }
         }
     }
@@ -176,9 +149,9 @@ return require('packer').startup(function(use)
                 -- refactor
                 refactor = {
                     highlight_definitions = {
-                      enable = true,
-                      -- Set to false if you have an `updatetime` of ~100.
-                      clear_on_cursor_move = true,
+                        enable = true,
+                        -- Set to false if you have an `updatetime` of ~100.
+                        clear_on_cursor_move = true,
                     },
                     highlight_current_scope = { enable = false },
                     smart_rename = {
@@ -203,7 +176,7 @@ return require('packer').startup(function(use)
     use {
         'nvim-telescope/telescope.nvim',
         requires = {
-            {'nvim-lua/plenary.nvim'}
+            { 'nvim-lua/plenary.nvim' }
         },
         config = function()
             require('telescope').setup {
@@ -235,11 +208,17 @@ return require('packer').startup(function(use)
             "neovim/nvim-lspconfig"
         }
     }
+    use {
+        'SmiteshP/nvim-navic',
+        requires = {
+            "neovim/nvim-lspconfig"
+        }
+    }
     -- }}}
     -- LSP Saga {{{
     use {
         'tami5/lspsaga.nvim',
-        requires = {'neovim/nvim-lspconfig'},
+        requires = { 'neovim/nvim-lspconfig' },
         config = function()
             local saga = require('lspsaga')
             saga.init_lsp_saga()
@@ -264,7 +243,7 @@ return require('packer').startup(function(use)
         },
         config = function()
             -- Setup nvim-cmp.
-            local cmp = require'cmp'
+            local cmp = require 'cmp'
             local lspkind = require 'lspkind'
             cmp.setup({
                 formatting = {
@@ -288,30 +267,30 @@ return require('packer').startup(function(use)
                     end,
                 },
                 mapping = {
-                  ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
-                  ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
-                  ['<C-j>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 'c' }),
-                  ['<C-k>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i', 'c' }),
-                  -- FIXME: why don't this work?
-                  -- ['<C-l>'] = cmp.mapping(function(fallback)
-                  --   if cmp.visible() == true then
-                  --     return cmp.complete_common_string()
-                  --   else
-                  --     fallback()
-                  --   end
-                  -- end, { 'i', 'c' }),
-                  ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
-                  -- ['<C-y>'] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
-                  ['<C-e>'] = cmp.mapping({
-                    i = cmp.mapping.abort(),
-                    c = cmp.mapping.close(),
-                  }),
-                  ['<C-y>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+                    ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
+                    ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
+                    ['<C-j>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 'c' }),
+                    ['<C-k>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i', 'c' }),
+                    -- FIXME: why don't this work?
+                    -- ['<C-l>'] = cmp.mapping(function(fallback)
+                    --   if cmp.visible() == true then
+                    --     return cmp.complete_common_string()
+                    --   else
+                    --     fallback()
+                    --   end
+                    -- end, { 'i', 'c' }),
+                    ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
+                    -- ['<C-y>'] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
+                    ['<C-e>'] = cmp.mapping({
+                        i = cmp.mapping.abort(),
+                        c = cmp.mapping.close(),
+                    }),
+                    ['<C-y>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
                 },
                 sources = cmp.config.sources({
-                  { name = 'nvim_lsp' },
-                  { name = 'luasnip' },
-                  { name = 'nvim_lua' },
+                    { name = 'nvim_lsp' },
+                    { name = 'luasnip' },
+                    { name = 'nvim_lua' },
                 }, {
                     { name = 'path', max_item_count = 5 },
                     { name = 'buffer', max_item_count = 5 },
