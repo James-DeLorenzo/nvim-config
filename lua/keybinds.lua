@@ -2,46 +2,58 @@
 local utils = {}
 
 function utils.map(type, key, value, opts) -- the other functions are just for more vim-feel usage
-  local options = opts or {}
-  vim.api.nvim_set_keymap(type, key, value, options)
+    local options = opts or {}
+    vim.api.nvim_set_keymap(type, key, value, options)
 end
+
 function utils.noremap(type, key, value, opts)
-  local options = {noremap = true}
-  if opts then
-    options = vim.tbl_extend('force', options, opts)
-  end
-  vim.api.nvim_set_keymap(type,key,value, options)
+    local options = { noremap = true }
+    if opts then
+        options = vim.tbl_extend('force', options, opts)
+    end
+    vim.api.nvim_set_keymap(type, key, value, options)
 end
+
 function utils.nnoremap(key, value, opts)
-  utils.noremap('n', key, value, opts)
+    utils.noremap('n', key, value, opts)
 end
+
 function utils.inoremap(key, value, opts)
-  utils.noremap('i', key, value, opts)
+    utils.noremap('i', key, value, opts)
 end
+
 function utils.vnoremap(key, value, opts)
-  utils.noremap('v', key, value, opts)
+    utils.noremap('v', key, value, opts)
 end
+
 function utils.xnoremap(key, value, opts)
-  utils.noremap('x', key, value, opts)
+    utils.noremap('x', key, value, opts)
 end
+
 function utils.tnoremap(key, value, opts)
-  utils.noremap('t', key, value, opts)
+    utils.noremap('t', key, value, opts)
 end
+
 function utils.cnoremap(key, value, opts)
-  utils.noremap('c', key, value, opts)
+    utils.noremap('c', key, value, opts)
 end
+
 function utils.nmap(key, value, opts)
-  utils.map('n', key, value, opts)
+    utils.map('n', key, value, opts)
 end
+
 function utils.imap(key, value, opts)
-  utils.map('i', key, value, opts)
+    utils.map('i', key, value, opts)
 end
+
 function utils.vmap(key, value, opts)
-  utils.map('v', key, value, opts)
+    utils.map('v', key, value, opts)
 end
+
 function utils.tmap(key, value, opts)
-  utils.map('t', key, value, opts)
+    utils.map('t', key, value, opts)
 end
+
 -- }}}
 
 -- NO ARROW KEYS {{{
@@ -90,27 +102,30 @@ utils.nnoremap('<leader>fn', '<CMD>Telescope lsp_document_symbols<CR>')
 utils.nnoremap('<leader>fs', '<CMD>Telescope grep_string<CR>')
 utils.nnoremap('<leader><leader>ft', '<CMD>Telescope filetypes<CR>')
 utils.nnoremap('<leader>gf', '<CMD>Telescope git_files<CR>')
+utils.nnoremap('<leader>bb', '<CMD>Telescope file_browser<CR>')
 -- }}}
 
 -- window movement {{{
 if vim.fn.has('macunix') == 1 then
-utils.nnoremap('∆','<c-w>j', { silent = true })
-utils.nnoremap('˚','<c-w>k', { silent = true })
-utils.nnoremap('¬','<c-w><c-l>', { silent = true })
-utils.nnoremap('˙','<c-w><c-h>', { silent = true })
+    utils.nnoremap('∆', '<c-w>j', { silent = true })
+    utils.nnoremap('˚', '<c-w>k', { silent = true })
+    utils.nnoremap('¬', '<c-w><c-l>', { silent = true })
+    utils.nnoremap('˙', '<c-w><c-h>', { silent = true })
 else
-utils.nnoremap('<A-j>','<c-w>j')
-utils.nnoremap('<A-k>','<c-w>k')
-utils.nnoremap('<A-l>','<c-w><c-l>', { silent = true })
-utils.nnoremap('<A-h>','<c-w><c-h>', { silent = true })
+    utils.nnoremap('<A-j>', '<c-w>j')
+    utils.nnoremap('<A-k>', '<c-w>k')
+    utils.nnoremap('<A-l>', '<c-w><c-l>', { silent = true })
+    utils.nnoremap('<A-h>', '<c-w><c-h>', { silent = true })
 end
 -- }}}
 
 -- Git {{{
-utils.nnoremap('<leader>gb', '<CMD>Gitsigns blame_line<CR>', { silent = true })
+utils.nnoremap('<leader>glb', '<CMD>Gitsigns blame_line<CR>', { silent = true })
 utils.nnoremap('<leader>ghb', '<CMD>Gitsigns preview_hunk<CR>', { silent = true })
 utils.nnoremap('<leader>ghr', '<CMD>Gitsigns reset_hunk<CR>', { silent = true })
-    -- }}}
+utils.nnoremap('<leader>gd', '<CMD>Gitsigns diffthis<CR>', { silent = true })
+utils.nnoremap('<leader>gbr', '<CMD>Gitsigns reset_buffer<CR>', { silent = true })
+-- }}}
 
 -- local function test()
 --     print("test")

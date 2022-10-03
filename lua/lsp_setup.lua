@@ -41,9 +41,9 @@ lspconfig.terraformls.setup {
     end
 }
 lspconfig.tflint.setup {
-    on_attach = function(client, bufnr)
-        navic.attach(client, bufnr)
-    end
+    -- on_attach = function(client, bufnr)
+    --     navic.attach(client, bufnr)
+    -- end
 }
 lspconfig.jsonls.setup {
     on_attach = function(client, bufnr)
