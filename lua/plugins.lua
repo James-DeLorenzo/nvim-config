@@ -102,12 +102,20 @@ return require('packer').startup(function(use)
         requires = { 'rktjmp/lush.nvim' }
     }
     use {
-        -- 'james-delorenzo/bluloco.nvim',
-        '~/workspaces/bluloco.nvim',
+        'uloco/bluloco.nvim',
         requires = { 'rktjmp/lush.nvim' },
         config = function()
-            vim.cmd('colorscheme bluloco_custom')
+            vim.cmd('colorscheme bluloco')
         end
+    }
+    use {
+        -- 'james-delorenzo/bluloco.nvim',
+        '~/workspaces/bluloco.nvim',
+        as = 'bluloco_custom',
+        requires = { 'rktjmp/lush.nvim' },
+        -- config = function()
+        --     vim.cmd('colorscheme bluloco_custom')
+        -- end
     }
     -- }}}
     -- feline {{{
