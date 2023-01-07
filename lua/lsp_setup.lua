@@ -1,71 +1,50 @@
-require("nvim-lsp-installer").setup {
-    log_level = vim.log.levels.DEBUG
-}
+require("mason").setup()
+local mason_lsp = require("mason-lspconfig")
 local lspconfig = require("lspconfig")
 local navic = require("nvim-navic")
-lspconfig.sumneko_lua.setup {
-    settings = {
-        Lua = {
-            diagnostics = {
-                globals = { 'vim' }
-            }
-        }
-    },
-    on_attach = function(client, bufnr)
-        navic.attach(client, bufnr)
-    end
-}
-lspconfig.pyright.setup {
-    settings = {
-        python = {
-            venvPath = "/Users/jamesdelorenzo/.virtualenvs"
-        }
-    },
-    on_attach = function(client, bufnr)
-        navic.attach(client, bufnr)
-    end
-}
-lspconfig.ccls.setup {
-    init_options = {
-        cache = {
-            directory = ".ccls-cache";
-        }
-    },
-    on_attach = function(client, bufnr)
-        navic.attach(client, bufnr)
-    end
-}
-lspconfig.terraformls.setup {
-    on_attach = function(client, bufnr)
-        navic.attach(client, bufnr)
-    end
-}
-lspconfig.tflint.setup {
-    -- on_attach = function(client, bufnr)
-    --     navic.attach(client, bufnr)
-    -- end
-}
-lspconfig.jsonls.setup {
-    on_attach = function(client, bufnr)
-        navic.attach(client, bufnr)
-    end
-}
-lspconfig.dockerls.setup {
-    on_attach = function(client, bufnr)
-        navic.attach(client, bufnr)
-    end
-}
-lspconfig.yamlls.setup {
-    on_attach = function(client, bufnr)
-        navic.attach(client, bufnr)
-    end
-}
-lspconfig.clangd.setup {
-    on_attach = function(client, bufnr)
-        navic.attach(client, bufnr)
-    end
-}
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
+mason_lsp.setup()
+mason_lsp.setup_handlers {
+    function(server_name)
+        lspconfig[server_name].setup {
+            capabilities = capabilities,
+            on_attach = function(client, bufnr)
+                if client.server_capabilities.documentSymbolProvider then
+                    navic.attach(client, bufnr)
+                end
+            end
+        }
+    end,
+    ["sumneko_lua"] = function()
+        lspconfig.sumneko_lua.setup {
+            settings = {
+                Lua = {
+                    diagnostics = {
+                        globals = { 'vim' }
+                    }
+                }
+            },
+            on_attach = function(client, bufnr)
+                navic.attach(client, bufnr)
+            end
+        }
+    end,
+    ["pyright"] = function()
+        lspconfig.pyright.setup {
+            settings = {
+                python = {
+                    venvPath = "/Users/jamesdelorenzo/.virtualenvs",
+                    reportUnnecessaryTypeIgnoreComment = true
+                }
+            },
+            on_attach = function(client, bufnr)
+                navic.attach(client, bufnr)
+            end
+
+        }
+    end,
+}
 
 vim.cmd([[
     augroup Format
