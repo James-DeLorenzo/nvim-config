@@ -31,6 +31,8 @@ vim.opt.completeopt = { 'menu', 'menuone', 'preview', 'noselect', 'noinsert' }
 vim.opt.listchars = { tab = ">-<", multispace = "", extends = ">", precedes = "<" }
 vim.o.list = true
 vim.o.modeline = true
+vim.wo.foldmethod = "expr"
+vim.o.foldexpr = "nvim_treesitter#foldexpr()"
 vim.o.foldlevelstart = 99
 vim.opt.formatoptions:remove({ 'o' })
 

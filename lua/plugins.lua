@@ -20,9 +20,9 @@ return require('packer').startup(function(use)
     -- basic nvim plugins {{{
     use 'wbthomason/packer.nvim'
     use 'kyazdani42/nvim-web-devicons'
-    use 'ggandor/lightspeed.nvim'
     use 'famiu/bufdelete.nvim'
     use 'numToStr/FTerm.nvim'
+    use 'folke/trouble.nvim'
     use {
         'windwp/nvim-autopairs',
         config = function()
@@ -46,7 +46,7 @@ return require('packer').startup(function(use)
         config = function()
             require('Comment').setup {}
             local ft = require('Comment.ft')
-            ft.set('terraform', '#%s')
+            ft.terraform = '#%s'
         end
     }
     -- colorizer {{{
@@ -76,6 +76,12 @@ return require('packer').startup(function(use)
                 closable = false,
                 insert_at_end = true,
                 semantic_letters = true,
+                diagnostics = {
+                    { enabled = true }, -- ERROR
+                    { enabled = false }, -- WARN
+                    { enabled = false }, -- INFO
+                    { enabled = true }, -- HINT
+                }
             }
         end
     }
@@ -109,13 +115,8 @@ return require('packer').startup(function(use)
         end
     }
     use {
-        -- 'james-delorenzo/bluloco.nvim',
-        '~/workspaces/bluloco.nvim',
-        as = 'bluloco_custom',
+        'james-delorenzo/bluloco_custom.nvim',
         requires = { 'rktjmp/lush.nvim' },
-        -- config = function()
-        --     vim.cmd('colorscheme bluloco_custom')
-        -- end
     }
     -- }}}
     -- feline {{{
@@ -139,8 +140,6 @@ return require('packer').startup(function(use)
         },
         run = ':TSUpdate',
         config = function()
-            vim.wo.foldmethod = "expr"
-            vim.o.foldexpr = "nvim_treesitter#foldexpr()"
             require('nvim-treesitter.configs').setup {
                 highlight = {
                     enable = true,
@@ -217,9 +216,13 @@ return require('packer').startup(function(use)
     -- LSP Stuffs {{{
     -- Lsp Config & installer {{{
     use {
-        'williamboman/nvim-lsp-installer',
+        'williamboman/nvim-lsp-installer'
+    }
+    use {
+        'williamboman/mason.nvim',
         requires = {
-            "neovim/nvim-lspconfig"
+            'williamboman/mason-lspconfig.nvim',
+            'neovim/nvim-lspconfig'
         }
     }
     use {
@@ -231,7 +234,7 @@ return require('packer').startup(function(use)
     -- }}}
     -- LSP Saga {{{
     use {
-        'tami5/lspsaga.nvim',
+        'glepnir/lspsaga.nvim',
         requires = { 'neovim/nvim-lspconfig' },
         config = function()
             local saga = require('lspsaga')
@@ -265,8 +268,8 @@ return require('packer').startup(function(use)
                         mode = 'symbol_text',
                         with_text = true,
                         menu = ({
-                            buffer = "[Buf]",
                             nvim_lsp = "[lsp]",
+                            buffer = "[Buf]",
                             luasnip = "[snip]",
                             nvim_lua = "[lua]",
                             rg = "[RG]",
@@ -307,8 +310,8 @@ return require('packer').startup(function(use)
                     { name = 'nvim_lua' },
                 }, {
                     { name = 'path', max_item_count = 5 },
-                    { name = 'buffer', max_item_count = 5 },
-                    { name = 'rg', max_item_count = 5 },
+                    { name = 'buffer', max_item_count = 3 },
+                    { name = 'rg', max_item_count = 3 },
                 }),
                 experimental = {
                     native_menu = false,
@@ -341,6 +344,10 @@ return require('packer').startup(function(use)
         end
     }
     -- }}}
+    -- null-ls {{{
+    use { 'jose-elias-alvarez/null-ls.nvim' }
+    -- }}}
+
     -- }}}
 end)
 
