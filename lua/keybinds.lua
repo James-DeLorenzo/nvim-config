@@ -1,9 +1,9 @@
--- mapping azond settings helpers {{{
+-- mapping and settings helpers {{{
 local utils = {}
 
 function utils.map(type, key, value, opts) -- the other functions are just for more vim-feel usage
     local options = opts or {}
-    vim.api.nvim_set_keymap(type, key, value, options)
+    vim.keymap.set(type, key, value, options)
 end
 
 function utils.noremap(type, key, value, opts)
@@ -11,7 +11,7 @@ function utils.noremap(type, key, value, opts)
     if opts then
         options = vim.tbl_extend('force', options, opts)
     end
-    vim.api.nvim_set_keymap(type, key, value, options)
+    vim.keymap.set(type, key, value, options)
 end
 
 function utils.nnoremap(key, value, opts)
@@ -68,6 +68,7 @@ utils.inoremap('<Right>', '<Nop>')
 -- }}}
 -- Change leader key
 utils.nmap('<Space>', '<Nop>')
+utils.nmap('<F1>', '<Nop>')
 vim.g.mapleader = " "
 
 -- utils.nnoremap('<F3>', '<CMD>lua require("FTerm").toggle()<CR>', {silent = true})
@@ -139,4 +140,4 @@ utils.nnoremap('<F5>', '<CMD>e!<CR>', { silent = true })
 -- TODO: wait until this is fixed in nvim
 -- utils.cnoremap('w!!', 'w !sudo -S tee %')
 
--- vim: foldmethod=marker
+-- vim: foldmethod=marker foldlevel=0
