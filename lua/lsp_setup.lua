@@ -1,9 +1,11 @@
 require("mason").setup()
 local mason_lsp = require("mason-lspconfig")
+local neodev = require("neodev")
 local lspconfig = require("lspconfig")
 local navic = require("nvim-navic")
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
+neodev.setup()
 mason_lsp.setup()
 mason_lsp.setup_handlers {
     function(server_name)
@@ -20,6 +22,9 @@ mason_lsp.setup_handlers {
         lspconfig.sumneko_lua.setup {
             settings = {
                 Lua = {
+                    completion = {
+                        callSnippet = "Replace"
+                    },
                     diagnostics = {
                         globals = { 'vim' }
                     }

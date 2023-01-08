@@ -1,3 +1,4 @@
+-- bootstrap {{{
 local ensure_packer = function()
     local fn = vim.fn
     local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
@@ -10,25 +11,18 @@ local ensure_packer = function()
 end
 
 local packer_bootstrap = ensure_packer()
+-- }}}
 
 return require('packer').startup(function(use)
     -- basic vim plugins {{{
     use 'tpope/vim-sensible'
     -- use 'tpope/vim-commentary'
-    use {
-        'matze/vim-move',
+    use { 'matze/vim-move',
         config = function()
             vim.api.nvim_set_var('move_key_modifier', 'C')
+            vim.api.nvim_set_var('move_key_modifier_visualmode', 'C')
         end
     }
-    -- context {{{
-    use {
-        'wellle/context.vim',
-        config = function()
-            vim.api.nvim_set_var('context_enabled', 0)
-        end
-    }
-    -- }}}
     -- }}}
     -- basic nvim plugins {{{
     use 'wbthomason/packer.nvim'
@@ -36,14 +30,30 @@ return require('packer').startup(function(use)
     use 'famiu/bufdelete.nvim'
     use 'numToStr/FTerm.nvim'
     use 'folke/trouble.nvim'
-    use {
-        'windwp/nvim-autopairs',
+    use 'lukas-reineke/indent-blankline.nvim'
+    use { 'ggandor/leap.nvim',
+        config = function()
+            require('leap').add_default_mappings()
+        end
+    }
+    use { "kylechui/nvim-surround",
+        tag = "*", -- Use for stability; omit to use `main` branch for the latest features
+        config = function()
+            require("nvim-surround").setup({})
+        end
+    }
+    use { 'windwp/nvim-autopairs',
         config = function()
             require('nvim-autopairs').setup {}
         end
     }
-    use {
-        'lewis6991/gitsigns.nvim',
+    use { 'sindrets/diffview.nvim',
+        requires = 'nvim-lua/plenary.nvim',
+        config = function()
+            require("diffview").setup()
+        end
+    }
+    use { 'lewis6991/gitsigns.nvim',
         requires = {
             'nvim-lua/plenary.nvim'
         },
@@ -54,25 +64,44 @@ return require('packer').startup(function(use)
             }
         end
     }
-    use {
-        'numToStr/Comment.nvim',
+    use { 'numToStr/Comment.nvim',
         config = function()
             require('Comment').setup {}
             local ft = require('Comment.ft')
             ft.terraform = '#%s'
         end
     }
+    use { 'gelguy/wilder.nvim',
+        requires = {
+            'romgrk/fzy-lua-native',
+            'roxma/nvim-yarp'
+        },
+        config = function()
+            local wilder = require('wilder')
+            wilder.setup({ modes = { ':', '/', '?' } })
+            wilder.set_option('renderer', wilder.popupmenu_renderer({
+                pumblend = 20,
+                left = { ' ', wilder.popupmenu_devicons() },
+                right = { ' ', wilder.popupmenu_scrollbar() },
+                highlighter = {
+                    wilder.lua_fzy_highlighter(), -- requires fzy-lua-native vim plugin found
+                },
+                highlights = {
+                    accent = wilder.make_hl('WilderAccent', 'Pmenu', { { a = 1 }, { a = 1 }, { foreground = '#f4468f' } }),
+                },
+            }))
+            wilder.set_option('debounce', 200)
+        end,
+    }
     -- colorizer {{{
-    use {
-        'norcalli/nvim-colorizer.lua',
+    use { 'norcalli/nvim-colorizer.lua',
         config = function()
             require('colorizer').setup({ '*'; }, { names = false; RRGGBBAA = true; })
         end
     }
     -- }}}
     -- which-key {{{
-    use {
-        'folke/which-key.nvim',
+    use { 'folke/which-key.nvim',
         disable = false,
         config = function()
             require('which-key').setup {}
@@ -81,8 +110,7 @@ return require('packer').startup(function(use)
     -- }}}
     -- }}}
     -- buffer line stuff {{{
-    use {
-        'romgrk/barbar.nvim',
+    use { 'romgrk/barbar.nvim',
         requires = { 'kyazdani42/nvim-web-devicons' },
         config = function()
             vim.g.bufferline = {
@@ -100,8 +128,7 @@ return require('packer').startup(function(use)
     }
     -- }}}
     -- cheathsheet {{{
-    use {
-        'sudormrfbin/cheatsheet.nvim',
+    use { 'sudormrfbin/cheatsheet.nvim',
         requires = {
             'nvim-lua/popup.nvim',
             'nvim-lua/plenary.nvim',
@@ -116,25 +143,21 @@ return require('packer').startup(function(use)
     -- }}}
     -- themes {{{
     use 'rktjmp/lush.nvim'
-    use {
-        "rktjmp/shipwright.nvim",
+    use { "rktjmp/shipwright.nvim",
         requires = { 'rktjmp/lush.nvim' }
     }
-    use {
-        'uloco/bluloco.nvim',
+    use { 'uloco/bluloco.nvim',
         requires = { 'rktjmp/lush.nvim' },
         config = function()
             vim.cmd('colorscheme bluloco')
         end
     }
-    use {
-        'james-delorenzo/bluloco_custom.nvim',
+    use { 'james-delorenzo/bluloco_custom.nvim',
         requires = { 'rktjmp/lush.nvim' },
     }
     -- }}}
     -- feline {{{
-    use {
-        'feline-nvim/feline.nvim',
+    use { 'feline-nvim/feline.nvim',
         requires = {
             {
                 '~/workspaces/bluloco.nvim'
@@ -144,12 +167,12 @@ return require('packer').startup(function(use)
 
     -- }}}
     -- tree-sitter {{{
-    use {
-        'nvim-treesitter/nvim-treesitter',
+    use { 'nvim-treesitter/nvim-treesitter',
         requires = {
             'p00f/nvim-ts-rainbow',
             'nvim-treesitter/nvim-treesitter-refactor',
-            'nvim-treesitter/playground'
+            'nvim-treesitter/playground',
+            'nvim-treesitter/nvim-treesitter-context'
         },
         run = ':TSUpdate',
         config = function()
@@ -193,10 +216,9 @@ return require('packer').startup(function(use)
     }
     -- }}}
     -- telescope configs {{{
-    use {
-        'nvim-telescope/telescope.nvim',
+    use { 'nvim-telescope/telescope.nvim',
         requires = {
-            { 'nvim-lua/plenary.nvim' }
+            'nvim-lua/plenary.nvim'
         },
         config = function()
             require('telescope').setup {
@@ -218,8 +240,7 @@ return require('packer').startup(function(use)
             }
         end
     }
-    use {
-        "nvim-telescope/telescope-file-browser.nvim",
+    use { "nvim-telescope/telescope-file-browser.nvim",
         config = function()
             require('telescope').load_extension("file_browser")
         end
@@ -228,26 +249,21 @@ return require('packer').startup(function(use)
     -- }}}
     -- LSP Stuffs {{{
     -- Lsp Config & installer {{{
-    use {
-        'williamboman/nvim-lsp-installer'
-    }
-    use {
-        'williamboman/mason.nvim',
+    use "folke/neodev.nvim"
+    use { 'williamboman/mason.nvim',
         requires = {
             'williamboman/mason-lspconfig.nvim',
             'neovim/nvim-lspconfig'
         }
     }
-    use {
-        'SmiteshP/nvim-navic',
+    use { 'SmiteshP/nvim-navic',
         requires = {
             "neovim/nvim-lspconfig"
         }
     }
     -- }}}
     -- LSP Saga {{{
-    use {
-        'glepnir/lspsaga.nvim',
+    use { 'glepnir/lspsaga.nvim',
         requires = { 'neovim/nvim-lspconfig' },
         config = function()
             local saga = require('lspsaga')
@@ -256,8 +272,7 @@ return require('packer').startup(function(use)
     }
     -- }}}
     -- cmp {{{
-    use {
-        'hrsh7th/nvim-cmp',
+    use { 'hrsh7th/nvim-cmp',
         requires = {
             'neovim/nvim-lspconfig',
             'hrsh7th/cmp-nvim-lua',
@@ -362,8 +377,7 @@ return require('packer').startup(function(use)
     -- }}}
 
     -- }}}
-    -- Automatically set up your configuration after cloning packer.nvim
-    -- Put this at the end after all plugins
+
     if packer_bootstrap then
         require('packer').sync()
     end
