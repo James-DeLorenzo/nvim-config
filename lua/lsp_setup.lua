@@ -22,6 +22,9 @@ mason_lsp.setup_handlers {
         lspconfig.sumneko_lua.setup {
             settings = {
                 Lua = {
+                    workspace = {
+                        checkThirdParty = false
+                    },
                     completion = {
                         callSnippet = "Replace"
                     },
