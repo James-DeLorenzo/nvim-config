@@ -40,3 +40,10 @@ vim.o.updatetime = 300
 vim.o.timeoutlen = 500
 
 vim.o.laststatus = 3
+
+vim.o.splitright = true
+vim.o.splitbelow = true
+vim.o.pumblend = 45
+
+vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
+vim.opt.undofile = true

@@ -16,6 +16,7 @@ local packer_bootstrap = ensure_packer()
 return require('packer').startup(function(use)
     -- basic vim plugins {{{
     use 'tpope/vim-sensible'
+    use 'tpope/vim-fugitive'
     -- use 'tpope/vim-commentary'
     use { 'matze/vim-move',
         config = function()
@@ -25,7 +26,9 @@ return require('packer').startup(function(use)
     }
     -- }}}
     -- basic nvim plugins {{{
+    use 'ThePrimeagen/vim-be-good'
     use 'wbthomason/packer.nvim'
+    use 'eandrju/cellular-automaton.nvim'
     use 'kyazdani42/nvim-web-devicons'
     use 'famiu/bufdelete.nvim'
     use 'numToStr/FTerm.nvim'

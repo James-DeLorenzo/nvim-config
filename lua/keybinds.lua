@@ -132,10 +132,22 @@ utils.nnoremap('<leader>gbr', '<CMD>Gitsigns reset_buffer<CR>', { silent = true 
 -- end
 -- utils.nnoremap('<leader>te', [[]])
 
+-- greatest remap ever
+vim.keymap.set("x", "<leader>p", [["_dP]])
+
+-- next greatest remap ever : asbjornHaland
+vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]])
+vim.keymap.set("n", "<leader>Y", [["+Y]])
+
+vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]])
+
 utils.nnoremap('gX', [[:execute '!open ' . shellescape(expand('<cfile>'), 1)<CR>]], { silent = true })
 utils.nnoremap('<leader>nh', '<CMD>noh<CR>')
 utils.nnoremap('<F5>', '<CMD>e!<CR>', { silent = true })
 
+
+utils.nnoremap('<leader>mir', "<cmd>CellularAutomaton make_it_rain<CR>")
+utils.nnoremap('<leader>gol', "<cmd>CellularAutomaton game_of_life<CR>")
 -- TODO: wait until this is fixed in nvim
 -- utils.cnoremap('w!!', 'w !sudo -S tee %')
 
