@@ -68,15 +68,13 @@ utils.inoremap('<Right>', '<Nop>')
 -- }}}
 -- Change leader key
 utils.nmap('<Space>', '<Nop>')
-utils.nmap('<F1>', '<Nop>')
+utils.map({ 'n', 'i' }, '<F1>', '<Nop>')
 vim.g.mapleader = " "
 
 -- utils.nnoremap('<F3>', '<CMD>lua require("FTerm").toggle()<CR>', {silent = true})
 -- utils.tnoremap('<F3>', '<C-\\><C-n><CMD>lua require("FTerm").toggle()<CR>', { silent = true })
 
 -- lspSaga stuffs {{{
-utils.nnoremap('gh', '<CMD>Lspsaga lsp_finder<CR>', { silent = true })
-utils.nnoremap('K', '<CMD>Lspsaga hover_doc<CR>', { silent = true })
 utils.nnoremap('<F2>', '<CMD>Lspsaga rename<CR>', { silent = true })
 utils.nnoremap('<F24>', '<CMD>Lspsaga lsp_finder<CR>', { silent = true })
 utils.nnoremap('<C-S-SPACE>', '<CMD>Lspsaga signature_help<CR>')
@@ -95,7 +93,8 @@ utils.nnoremap('<Leader>bp', '<CMD>BufferPrevious<CR>', { silent = true })
 utils.nnoremap('<leader>fa', '<CMD>Telescope lsp_code_actions<CR>')
 utils.nnoremap('<leader>fb', '<CMD>Telescope buffers<CR>')
 utils.nnoremap('<leader>fd', '<CMD>Telescope diagnostics<CR>')
-utils.nnoremap('<leader>ff', '<CMD>Telescope find_files<CR>')
+utils.nnoremap('<leader>ff', function() require('telescope.builtin').find_files() end, { desc = "Find Files" })
+utils.nnoremap('<leader>fhf', function() require('telescope.builtin').find_files({ hidden = true }) end)
 utils.nnoremap('<leader>fg', '<CMD>Telescope live_grep<CR>')
 utils.nnoremap('<leader>fh', '<CMD>Telescope help_tags<CR>')
 utils.nnoremap('<leader>fl', '<CMD>Telescope current_buffer_fuzzy_find<CR>')

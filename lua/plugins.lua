@@ -30,7 +30,18 @@ return require('packer').startup(function(use)
     use 'famiu/bufdelete.nvim'
     use 'numToStr/FTerm.nvim'
     use 'folke/trouble.nvim'
-    use 'lukas-reineke/indent-blankline.nvim'
+    use { 'lukas-reineke/indent-blankline.nvim',
+        config = function()
+            require("indent_blankline").setup {
+                show_current_context = true,
+                show_current_context_start = true,
+                use_treesitter = true,
+                space_char_highlight_list = { "Float" }
+                -- use_treesitter_scope = true,
+
+            }
+        end
+    }
     use { 'ggandor/leap.nvim',
         config = function()
             require('leap').add_default_mappings()
@@ -88,7 +99,7 @@ return require('packer').startup(function(use)
                     wilder.python_file_finder_pipeline({
                         file_command = function(ctx, arg)
                             if string.find(arg, '.') ~= nil then
-                                return { 'fd', '-tf', '-H' }
+                                return { 'fd', '-tf', '-H', '-I' }
                             else
                                 return { 'fd', '-tf' }
                             end
@@ -163,7 +174,7 @@ return require('packer').startup(function(use)
     -- colorizer {{{
     use { 'norcalli/nvim-colorizer.lua',
         config = function()
-            require('colorizer').setup({ '*'; }, { names = false; RRGGBBAA = true; })
+            require('colorizer').setup({ '*', }, { names = false, RRGGBBAA = true, })
         end
     }
     -- }}}
@@ -185,27 +196,13 @@ return require('packer').startup(function(use)
                 insert_at_end = true,
                 semantic_letters = true,
                 diagnostics = {
-                    { enabled = true }, -- ERROR
+                    { enabled = true },  -- ERROR
                     { enabled = false }, -- WARN
                     { enabled = false }, -- INFO
-                    { enabled = true }, -- HINT
+                    { enabled = true },  -- HINT
                 }
             }
         end
-    }
-    -- }}}
-    -- cheathsheet {{{
-    use { 'sudormrfbin/cheatsheet.nvim',
-        requires = {
-            'nvim-lua/popup.nvim',
-            'nvim-lua/plenary.nvim',
-            'nvim-telescope/telescope.nvim'
-        },
-        -- config = function()
-        --     require("cheatsheet").setup {
-        --         telescope_mappings
-        --     }
-        -- end
     }
     -- }}}
     -- themes {{{
@@ -236,7 +233,7 @@ return require('packer').startup(function(use)
     -- tree-sitter {{{
     use { 'nvim-treesitter/nvim-treesitter',
         requires = {
-            'p00f/nvim-ts-rainbow',
+            'mrjones2014/nvim-ts-rainbow',
             'nvim-treesitter/nvim-treesitter-refactor',
             'nvim-treesitter/playground',
             'nvim-treesitter/nvim-treesitter-context'
@@ -330,7 +327,7 @@ return require('packer').startup(function(use)
     }
     -- }}}
     -- LSP Saga {{{
-    use { 'glepnir/lspsaga.nvim',
+    use { 'kkharji/lspsaga.nvim',
         requires = { 'neovim/nvim-lspconfig' },
         config = function()
             local saga = require('lspsaga')
@@ -404,9 +401,9 @@ return require('packer').startup(function(use)
                     { name = 'luasnip' },
                     { name = 'nvim_lua' },
                 }, {
-                    { name = 'path', max_item_count = 5 },
+                    { name = 'path',   max_item_count = 5 },
                     { name = 'buffer', max_item_count = 3 },
-                    { name = 'rg', max_item_count = 3 },
+                    { name = 'rg',     max_item_count = 3 },
                 }),
                 experimental = {
                     native_menu = false,

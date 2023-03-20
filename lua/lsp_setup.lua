@@ -18,8 +18,8 @@ mason_lsp.setup_handlers {
             end
         }
     end,
-    ["sumneko_lua"] = function()
-        lspconfig.sumneko_lua.setup {
+    ["lua_ls"] = function()
+        lspconfig.lua_ls.setup {
             settings = {
                 Lua = {
                     workspace = {
@@ -49,7 +49,20 @@ mason_lsp.setup_handlers {
             on_attach = function(client, bufnr)
                 navic.attach(client, bufnr)
             end
-
+        }
+    end,
+    ["eslint"] = function()
+        lspconfig.eslint.setup {
+            root_dir = function()
+                return vim.fn.getcwd()
+            end,
+            on_attach = function(client, bufnr)
+                -- make sure to only do this for servers that you intend, in this example "eslint"
+                client.server_capabilities.document_formatting = true
+                if client.server_capabilities.documentSymbolProvider then
+                    navic.attach(client, bufnr)
+                end
+            end
         }
     end,
 }
