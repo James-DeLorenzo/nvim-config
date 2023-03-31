@@ -132,6 +132,9 @@ utils.nnoremap('<leader>gbr', '<CMD>Gitsigns reset_buffer<CR>', { silent = true 
 -- end
 -- utils.nnoremap('<leader>te', [[]])
 
+vim.keymap.set("n", "<c-D>", "<c-D>zz")
+vim.keymap.set("n", "<c-U>", "<c-U>zz")
+
 -- greatest remap ever
 vim.keymap.set("x", "<leader>p", [["_dP]])
 

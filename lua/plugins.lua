@@ -28,6 +28,17 @@ return require('packer').startup(function(use)
     -- basic nvim plugins {{{
     use 'ThePrimeagen/vim-be-good'
     use 'wbthomason/packer.nvim'
+    use {
+        'pwntester/octo.nvim',
+        requires = {
+            'nvim-lua/plenary.nvim',
+            'nvim-telescope/telescope.nvim',
+            'kyazdani42/nvim-web-devicons',
+        },
+        config = function()
+            require "octo".setup()
+        end
+    }
     use 'eandrju/cellular-automaton.nvim'
     use 'kyazdani42/nvim-web-devicons'
     use 'famiu/bufdelete.nvim'
@@ -63,6 +74,7 @@ return require('packer').startup(function(use)
     }
     use { 'sindrets/diffview.nvim',
         requires = 'nvim-lua/plenary.nvim',
+        disable = true,
         config = function()
             require("diffview").setup()
         end
@@ -194,17 +206,23 @@ return require('packer').startup(function(use)
     use { 'romgrk/barbar.nvim',
         requires = { 'kyazdani42/nvim-web-devicons' },
         config = function()
-            vim.g.bufferline = {
-                closable = false,
+            require 'bufferline'.setup({
+                auto_hide = true,
                 insert_at_end = true,
-                semantic_letters = true,
-                diagnostics = {
-                    { enabled = true },  -- ERROR
-                    { enabled = false }, -- WARN
-                    { enabled = false }, -- INFO
-                    { enabled = true },  -- HINT
+                highlight_alternate = true,
+                icons = {
+                    button = false,
+                    modified = {
+                        button = false
+                    },
+                    diagnostics = {
+                        [vim.diagnostic.severity.ERROR] = { enabled = true },
+                        [vim.diagnostic.severity.WARN] = { enabled = true },
+                        [vim.diagnostic.severity.INFO] = { enabled = true },
+                        [vim.diagnostic.severity.HINT] = { enabled = true },
+                    },
                 }
-            }
+            })
         end
     }
     -- }}}
@@ -254,7 +272,7 @@ return require('packer').startup(function(use)
                 },
                 -- ts-rainbow
                 rainbow = {
-                    enable = true
+                    enable = false
                 },
                 -- refactor
                 refactor = {
