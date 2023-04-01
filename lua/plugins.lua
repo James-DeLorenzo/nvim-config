@@ -28,6 +28,12 @@ return require('packer').startup(function(use)
     -- basic nvim plugins {{{
     use 'ThePrimeagen/vim-be-good'
     use 'wbthomason/packer.nvim'
+    use { 'folke/which-key.nvim',
+        disable = false,
+        config = function()
+            require('which-key').setup {}
+        end
+    }
     use {
         'pwntester/octo.nvim',
         requires = {
@@ -42,7 +48,6 @@ return require('packer').startup(function(use)
     use 'eandrju/cellular-automaton.nvim'
     use 'kyazdani42/nvim-web-devicons'
     use 'famiu/bufdelete.nvim'
-    use 'numToStr/FTerm.nvim'
     use 'folke/trouble.nvim'
     use { 'lukas-reineke/indent-blankline.nvim',
         config = function()
@@ -57,6 +62,7 @@ return require('packer').startup(function(use)
         end
     }
     use { 'ggandor/leap.nvim',
+        disable = true,
         config = function()
             require('leap').add_default_mappings()
         end
@@ -70,13 +76,6 @@ return require('packer').startup(function(use)
     use { 'windwp/nvim-autopairs',
         config = function()
             require('nvim-autopairs').setup {}
-        end
-    }
-    use { 'sindrets/diffview.nvim',
-        requires = 'nvim-lua/plenary.nvim',
-        disable = true,
-        config = function()
-            require("diffview").setup()
         end
     }
     use { 'lewis6991/gitsigns.nvim',
@@ -186,21 +185,11 @@ return require('packer').startup(function(use)
             wilder.set_option('debounce', 200)
         end,
     }
-    -- colorizer {{{
     use { 'norcalli/nvim-colorizer.lua',
         config = function()
             require('colorizer').setup({ '*', }, { names = false, RRGGBBAA = true, })
         end
     }
-    -- }}}
-    -- which-key {{{
-    use { 'folke/which-key.nvim',
-        disable = false,
-        config = function()
-            require('which-key').setup {}
-        end
-    }
-    -- }}}
     -- }}}
     -- buffer line stuff {{{
     use { 'romgrk/barbar.nvim',
@@ -249,12 +238,11 @@ return require('packer').startup(function(use)
             }
         }
     }
-
     -- }}}
     -- tree-sitter {{{
     use { 'nvim-treesitter/nvim-treesitter',
         requires = {
-            'mrjones2014/nvim-ts-rainbow',
+            'lincheney/nvim-ts-rainbow',
             'nvim-treesitter/nvim-treesitter-refactor',
             'nvim-treesitter/playground',
             'nvim-treesitter/nvim-treesitter-context'
@@ -272,7 +260,8 @@ return require('packer').startup(function(use)
                 },
                 -- ts-rainbow
                 rainbow = {
-                    enable = false
+                    enable = true,
+                    highlight_middle = false
                 },
                 -- refactor
                 refactor = {
@@ -302,6 +291,7 @@ return require('packer').startup(function(use)
     -- }}}
     -- telescope configs {{{
     use { 'nvim-telescope/telescope.nvim',
+        branch = '0.1.x',
         requires = {
             'nvim-lua/plenary.nvim'
         },
@@ -333,7 +323,6 @@ return require('packer').startup(function(use)
 
     -- }}}
     -- LSP Stuffs {{{
-    -- Lsp Config & installer {{{
     use "folke/neodev.nvim"
     use { 'williamboman/mason.nvim',
         requires = {
@@ -346,8 +335,6 @@ return require('packer').startup(function(use)
             "neovim/nvim-lspconfig"
         }
     }
-    -- }}}
-    -- LSP Saga {{{
     use { 'kkharji/lspsaga.nvim',
         requires = { 'neovim/nvim-lspconfig' },
         config = function()
@@ -355,7 +342,6 @@ return require('packer').startup(function(use)
             saga.init_lsp_saga()
         end
     }
-    -- }}}
     -- cmp {{{
     use { 'hrsh7th/nvim-cmp',
         requires = {
@@ -457,10 +443,6 @@ return require('packer').startup(function(use)
         end
     }
     -- }}}
-    -- null-ls {{{
-    use { 'jose-elias-alvarez/null-ls.nvim' }
-    -- }}}
-
     -- }}}
 
     if packer_bootstrap then

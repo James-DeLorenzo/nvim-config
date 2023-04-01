@@ -20,6 +20,7 @@ mason_lsp.setup_handlers {
     end,
     ["lua_ls"] = function()
         lspconfig.lua_ls.setup {
+            capabilities = capabilities,
             settings = {
                 Lua = {
                     workspace = {
@@ -34,12 +35,15 @@ mason_lsp.setup_handlers {
                 }
             },
             on_attach = function(client, bufnr)
-                navic.attach(client, bufnr)
+                if client.server_capabilities.documentSymbolProvider then
+                    navic.attach(client, bufnr)
+                end
             end
         }
     end,
     ["pyright"] = function()
         lspconfig.pyright.setup {
+            capabilities = capabilities,
             settings = {
                 python = {
                     venvPath = "/Users/jamesdelorenzo/.virtualenvs",
@@ -47,12 +51,15 @@ mason_lsp.setup_handlers {
                 }
             },
             on_attach = function(client, bufnr)
-                navic.attach(client, bufnr)
+                if client.server_capabilities.documentSymbolProvider then
+                    navic.attach(client, bufnr)
+                end
             end
         }
     end,
     ["eslint"] = function()
         lspconfig.eslint.setup {
+            capabilities = capabilities,
             root_dir = function()
                 return vim.fn.getcwd()
             end,
