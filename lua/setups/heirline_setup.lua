@@ -27,7 +27,7 @@ local separators = {
     circle = '●',
 }
 
-local Navic = {
+local navic = {
     condition = function() return require("nvim-navic").is_available() end,
     provider = function()
         return require("nvim-navic").get_location({ highlight = true })
@@ -145,14 +145,14 @@ local function get_vi_blocks(seps, middle_provider)
     }
 end
 
-function get_diagnostics_count(severity)
+local function get_diagnostics_count(severity)
     local count = vim.tbl_count(vim.diagnostic.get(0, severity and { severity = severity }))
     return count ~= 0 and tostring(count) or ''
 end
 
 local align = { provider = "%=", hl = { bg = 'bg' } }
 
-local base_line = {
+local left_section = {
     get_vi_blocks({ separators.block, separators.right_rounded }, "%f"),
     {
         { provider = "%l:%c", hl = { bg = 'oceanblue' } },
@@ -188,8 +188,22 @@ local base_line = {
             },
             get_right_sep(nil, { bg = 'bg', fg = 'red' }),
         },
-    },
+    }
+}
+
+local center_section = {
+    navic,
     align
+}
+
+local right_section = {
+
+}
+
+local base_line = {
+    left_section,
+    center_section,
+    right_section
 }
 
 heirline.setup({
