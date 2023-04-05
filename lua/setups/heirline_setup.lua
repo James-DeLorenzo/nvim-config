@@ -132,25 +132,69 @@ local mode_colors = {
     t = "green",
 }
 
-heirline.load_colors(colors)
-
-local base_line = {
-    {
-      -- file name with vi color
-        get_left_sep(separators.block, function(self) return { fg = self.get_color() } end),
-        { provider = "%f", hl = function(self) return { bg = self.get_color() } end },
-        get_right_sep(separators.right_rounded, function(self) return { fg = self.get_color(), bg = 'oceanblue' } end),
+local function get_vi_blocks(seps, middle_provider)
+    return {
+        -- file name with vi color
+        get_left_sep(seps[1] or nil, function(self) return { fg = self.get_color() } end),
+        { provider = middle_provider, hl = function(self) return { bg = self.get_color() } end },
+        get_right_sep(seps[2] or nil, function(self) return { fg = self.get_color(), bg = 'oceanblue' } end),
         static = {
             get_color = function(self) return mode_colors[vim.fn.mode(1):sub(1, 1)] end,
         },
         update = { "ModeChanged" }
-    },
+    }
+end
+
+function get_diagnostics_count(severity)
+    local count = vim.tbl_count(vim.diagnostic.get(0, severity and { severity = severity }))
+    return count ~= 0 and tostring(count) or ''
+end
+
+local align = { provider = "%=", hl = { bg = 'bg' } }
+
+local base_line = {
+    get_vi_blocks({ separators.block, separators.right_rounded }, "%f"),
     {
         { provider = "%l:%c", hl = { bg = 'oceanblue' } },
-        get_right_sep(nil, { fg = 'oceanblue' })
-    }
+        get_right_sep(nil, { fg = 'oceanblue', bg = 'cyan' })
+    },
+    {
+        {
+            get_left_sep(separators.block, { fg = 'cyan' }),
+            {
+                provider = function() return get_diagnostics_count(vim.diagnostic.severity.HINT) end,
+                hl = { bg = 'cyan', fg = 'black' }
+            },
+            get_right_sep(nil, { bg = 'skyblue', fg = 'cyan' }),
+        },
+        {
+            {
+                provider = function() return get_diagnostics_count(vim.diagnostic.severity.INFO) end,
+                hl = { bg = 'skyblue', fg = 'black' }
+            },
+            get_right_sep(nil, { bg = 'yellow', fg = 'skyblue' }),
+        },
+        {
+            {
+                provider = function() return get_diagnostics_count(vim.diagnostic.severity.WARN) end,
+                hl = { bg = 'yellow', fg = 'black' }
+            },
+            get_right_sep(nil, { bg = 'red', fg = 'yellow' }),
+        },
+        {
+            {
+                provider = function() return get_diagnostics_count(vim.diagnostic.severity.ERROR) end,
+                hl = { bg = 'red', fg = 'black' }
+            },
+            get_right_sep(nil, { bg = 'bg', fg = 'red' }),
+        },
+    },
+    align
 }
 
 heirline.setup({
-    statusline = base_line
+    statusline = base_line,
+    opts = {
+        colors = colors
+    }
 })
