@@ -37,6 +37,7 @@ vim.o.foldlevelstart = 99
 vim.opt.formatoptions:remove({ 'o' })
 
 vim.o.updatetime = 300
+vim.o.timeout = true
 vim.o.timeoutlen = 500
 
 vim.o.laststatus = 3

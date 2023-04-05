@@ -69,13 +69,11 @@ utils.inoremap('<Right>', '<Nop>')
 -- Change leader key
 utils.nmap('<Space>', '<Nop>')
 utils.map({ 'n', 'i' }, '<F1>', '<Nop>')
-vim.g.mapleader = " "
 
 -- lspSaga stuffs {{{
 utils.nnoremap('<F2>', '<CMD>Lspsaga rename<CR>', { silent = true })
 utils.nnoremap('<F24>', '<CMD>Lspsaga lsp_finder<CR>', { silent = true })
-utils.nnoremap('<C-S-SPACE>', '<CMD>Lspsaga signature_help<CR>')
-utils.inoremap('<C-S-SPACE>', '<CMD>Lspsaga signature_help<CR>')
+utils.noremap({ 'n', 'i' }, '<C-S-SPACE>', vim.lsp.buf.signature_help)
 -- }}}
 
 -- barbar {{{
