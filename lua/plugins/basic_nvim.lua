@@ -1,20 +1,19 @@
 return {
     -- basic nvim plugins {{{
     'ThePrimeagen/vim-be-good',
-    'wbthomason/packer.nvim',
     {
-    "folke/which-key.nvim",
-    config = function()
-      vim.o.timeout = true
-      vim.o.timeoutlen = 300
-      require("which-key").setup({
-        -- your configuration comes here
-        -- or leave it empty to use the default settings
-        -- refer to the configuration section below
-      })
-    end,
-  },
-  {
+        "folke/which-key.nvim",
+        config = function()
+            vim.o.timeout = true
+            vim.o.timeoutlen = 300
+            require("which-key").setup({
+                -- your configuration comes here
+                -- or leave it empty to use the default settings
+                -- refer to the configuration section below
+            })
+        end,
+    },
+    {
         'pwntester/octo.nvim',
         dependencies = {
             'nvim-lua/plenary.nvim',
@@ -25,11 +24,18 @@ return {
             require "octo".setup()
         end
     },
-    'eandrju/cellular-automaton.nvim',
+    {
+        'eandrju/cellular-automaton.nvim',
+        keys = {
+            { '<leader>mir', "<cmd>CellularAutomaton make_it_rain<CR>", noremap = true },
+            { '<leader>gol', "<cmd>CellularAutomaton game_of_life<CR>", noremap = true }
+        }
+    },
     'kyazdani42/nvim-web-devicons',
     'famiu/bufdelete.nvim',
     'folke/trouble.nvim',
-    { 'lukas-reineke/indent-blankline.nvim',
+    {
+        'lukas-reineke/indent-blankline.nvim',
         config = function()
             require("indent_blankline").setup {
                 show_current_context = true,
@@ -41,43 +47,54 @@ return {
             }
         end
     },
-    { 'ggandor/leap.nvim',
+    {
+        'ggandor/leap.nvim',
         enabled = false,
         config = function()
             require('leap').add_default_mappings()
         end
     },
-    { "kylechui/nvim-surround",
+    {
+        "kylechui/nvim-surround",
         version = "*", -- Use for stability; omit to use `main` branch for the latest features
         event = "VeryLazy",
         config = function()
             require("nvim-surround").setup({})
         end
     },
-    { 'windwp/nvim-autopairs',
+    {
+        'windwp/nvim-autopairs',
         config = function()
             require('nvim-autopairs').setup {}
         end
     },
-    { 'lewis6991/gitsigns.nvim',
+    {
+        'lewis6991/gitsigns.nvim',
         dependencies = {
             'nvim-lua/plenary.nvim'
         },
-        config = function()
-            require('gitsigns').setup {
-                signcolumn = true,
-                numhl = false,
-            }
-        end
+        keys = {
+            { '<leader>glb', '<CMD>Gitsigns blame_line<CR>',   silent = true, noremap = true },
+            { '<leader>ghb', '<CMD>Gitsigns preview_hunk<CR>', silent = true, noremap = true },
+            { '<leader>ghr', '<CMD>Gitsigns reset_hunk<CR>',   silent = true, noremap = true },
+            { '<leader>gd',  '<CMD>Gitsigns diffthis<CR>',     silent = true, noremap = true },
+            { '<leader>gbr', '<CMD>Gitsigns reset_buffer<CR>', silent = true, noremap = true }
+        },
+        config = {
+            signcolumn = true,
+            numhl = false,
+        }
     },
-    { 'numToStr/Comment.nvim',
+    {
+        'numToStr/Comment.nvim',
         config = function()
             require('Comment').setup {}
             local ft = require('Comment.ft')
             ft.terraform = '#%s'
         end
     },
-    { 'gelguy/wilder.nvim',
+    {
+        'gelguy/wilder.nvim',
         lazy = false,
         dependencies = {
             'romgrk/fzy-lua-native',
@@ -167,7 +184,8 @@ return {
             wilder.set_option('debounce', 200)
         end,
     },
-    { 'norcalli/nvim-colorizer.lua',
+    {
+        'norcalli/nvim-colorizer.lua',
         config = function()
             require('colorizer').setup({ '*', }, { names = false, RRGGBBAA = true, })
         end

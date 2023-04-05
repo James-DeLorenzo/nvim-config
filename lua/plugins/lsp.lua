@@ -1,25 +1,32 @@
 return {
     "folke/neodev.nvim",
-    { 'williamboman/mason.nvim',
+    {
+        'williamboman/mason.nvim',
         dependencies = {
             'williamboman/mason-lspconfig.nvim',
             'neovim/nvim-lspconfig'
         }
     },
-    { 'SmiteshP/nvim-navic',
+    {
+        'SmiteshP/nvim-navic',
         dependencies = {
             "neovim/nvim-lspconfig"
         }
     },
-    { 'kkharji/lspsaga.nvim',
+    {
+        'kkharji/lspsaga.nvim',
         dependencies = { 'neovim/nvim-lspconfig' },
+        keys = {
+            { '<F2>',  '<CMD>Lspsaga rename<CR>',     silent = true, noremap = true },
+            { '<F24>', '<CMD>Lspsaga lsp_finder<CR>', silent = true, noremap = true },
+        },
         config = function()
-            local saga = require('lspsaga')
-            saga.init_lsp_saga()
+            require('lspsaga').init_lsp_saga()
         end
     },
     -- cmp {{{
-    { 'hrsh7th/nvim-cmp',
+    {
+        'hrsh7th/nvim-cmp',
         dependencies = {
             'neovim/nvim-lspconfig',
             'hrsh7th/cmp-nvim-lua',

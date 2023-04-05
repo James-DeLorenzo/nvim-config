@@ -1,12 +1,15 @@
 return {
-    { 'nvim-treesitter/nvim-treesitter',
+    {
+        'nvim-treesitter/nvim-treesitter',
         dependencies = {
             'lincheney/nvim-ts-rainbow',
             'nvim-treesitter/nvim-treesitter-refactor',
             'nvim-treesitter/playground',
             'nvim-treesitter/nvim-treesitter-context'
         },
-        build = ':TSUpdate',
+        build = function()
+            require("nvim-treesitter.install").update({ with_sync = true })
+        end,
         opts = {
             highlight = {
                 enable = true,

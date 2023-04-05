@@ -71,33 +71,7 @@ utils.nmap('<Space>', '<Nop>')
 utils.map({ 'n', 'i' }, '<F1>', '<Nop>')
 
 -- lspSaga stuffs {{{
-utils.nnoremap('<F2>', '<CMD>Lspsaga rename<CR>', { silent = true })
-utils.nnoremap('<F24>', '<CMD>Lspsaga lsp_finder<CR>', { silent = true })
 utils.noremap({ 'n', 'i' }, '<C-S-SPACE>', vim.lsp.buf.signature_help)
--- }}}
-
--- barbar {{{
-utils.nnoremap('<Leader>bc', '<CMD>BufferPick<CR>', { silent = true })
-utils.nnoremap('<Leader>bq', '<CMD>BufferClose<CR>', { silent = true })
-utils.nnoremap('<Leader>bn', '<CMD>BufferNext<CR>', { silent = true })
-utils.nnoremap('<Leader>bp', '<CMD>BufferPrevious<CR>', { silent = true })
--- utils.nnoremap('<C-^I>', 'BufferNext', { silent = true })
--- }}}
-
--- Telescope {{{
-utils.nnoremap('<leader>fa', '<CMD>Telescope lsp_code_actions<CR>')
-utils.nnoremap('<leader>fb', '<CMD>Telescope buffers<CR>')
-utils.nnoremap('<leader>fd', '<CMD>Telescope diagnostics<CR>')
-utils.nnoremap('<leader>ff', function() require('telescope.builtin').find_files() end, { desc = "Find Files" })
-utils.nnoremap('<leader>fhf', function() require('telescope.builtin').find_files({ hidden = true }) end)
-utils.nnoremap('<leader>fg', '<CMD>Telescope live_grep<CR>')
-utils.nnoremap('<leader>fh', '<CMD>Telescope help_tags<CR>')
-utils.nnoremap('<leader>fl', '<CMD>Telescope current_buffer_fuzzy_find<CR>')
-utils.nnoremap('<leader>fn', '<CMD>Telescope lsp_document_symbols<CR>')
-utils.nnoremap('<leader>fs', '<CMD>Telescope grep_string<CR>')
-utils.nnoremap('<leader><leader>ft', '<CMD>Telescope filetypes<CR>')
-utils.nnoremap('<leader>gf', '<CMD>Telescope git_files<CR>')
-utils.nnoremap('<leader>bb', '<CMD>Telescope file_browser<CR>')
 -- }}}
 
 -- window movement {{{
@@ -113,19 +87,6 @@ else
     utils.nnoremap('<A-h>', '<c-w><c-h>', { silent = true })
 end
 -- }}}
-
--- Git {{{
-utils.nnoremap('<leader>glb', '<CMD>Gitsigns blame_line<CR>', { silent = true })
-utils.nnoremap('<leader>ghb', '<CMD>Gitsigns preview_hunk<CR>', { silent = true })
-utils.nnoremap('<leader>ghr', '<CMD>Gitsigns reset_hunk<CR>', { silent = true })
-utils.nnoremap('<leader>gd', '<CMD>Gitsigns diffthis<CR>', { silent = true })
-utils.nnoremap('<leader>gbr', '<CMD>Gitsigns reset_buffer<CR>', { silent = true })
--- }}}
-
--- local function test()
---     print("test")
--- end
--- utils.nnoremap('<leader>te', [[]])
 
 vim.keymap.set("n", "<c-D>", "<c-D>zz")
 vim.keymap.set("n", "<c-U>", "<c-U>zz")
@@ -144,8 +105,6 @@ utils.nnoremap('<leader>nh', '<CMD>noh<CR>')
 utils.nnoremap('<F5>', '<CMD>e!<CR>', { silent = true })
 
 
-utils.nnoremap('<leader>mir', "<cmd>CellularAutomaton make_it_rain<CR>")
-utils.nnoremap('<leader>gol', "<cmd>CellularAutomaton game_of_life<CR>")
 -- TODO: wait until this is fixed in nvim
 -- utils.cnoremap('w!!', 'w !sudo -S tee %')
 
