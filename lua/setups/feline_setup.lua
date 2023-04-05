@@ -1,7 +1,16 @@
 -- Substitute preset_name with the name of the preset you want to modify.
 -- eg: "default" or "noicon"
 -- local custom_preset = require('feline.presets')['noicon']
-local navic = require('nvim-navic')
+local ok, feline = pcall(require, 'feline')
+if not ok then
+    print("Feline could not be loaded, skipping setup...")
+    return
+end
+local ok2, navic = pcall(require, 'nvim-navic')
+if not ok2 then
+    print("navic was not loaded, skipping setup...")
+    return
+end
 local git = require('feline.providers.git')
 local custom_theme = require('bluloco.feline')
 local vi_hl_name = require('feline.providers.vi_mode').get_mode_highlight_name
@@ -227,8 +236,7 @@ local components = {
         }
     }
 }
-
-require('feline').setup {
+feline.setup {
     components = components,
     theme = custom_theme
 }

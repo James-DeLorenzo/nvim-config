@@ -1,4 +1,9 @@
-require("mason").setup()
+local ok, mason = pcall(require, 'mason')
+if not ok then
+    print("Mason had an error, skipping lsp setup...")
+    return
+end
+mason.setup()
 local mason_lsp = require("mason-lspconfig")
 local neodev = require("neodev")
 local lspconfig = require("lspconfig")
