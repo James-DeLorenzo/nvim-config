@@ -1,8 +1,10 @@
 return {
     {
         'nvim-treesitter/nvim-treesitter',
+        event = 'BufEnter',
+        main = 'nvim-treesitter.configs',
         dependencies = {
-            'lincheney/nvim-ts-rainbow',
+            'HiPhish/nvim-ts-rainbow2',
             'nvim-treesitter/nvim-treesitter-refactor',
             'nvim-treesitter/playground',
             'nvim-treesitter/nvim-treesitter-context'

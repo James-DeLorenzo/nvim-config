@@ -2,6 +2,8 @@ return {
     "folke/neodev.nvim",
     {
         'williamboman/mason.nvim',
+        cmd = 'Mason',
+        build = ":MasonUpdate", -- :MasonUpdate updates registry contents
         dependencies = {
             'williamboman/mason-lspconfig.nvim',
             'neovim/nvim-lspconfig'
@@ -27,6 +29,7 @@ return {
     -- cmp {{{
     {
         'hrsh7th/nvim-cmp',
+        event = { 'BufReadPost' },
         dependencies = {
             'neovim/nvim-lspconfig',
             'hrsh7th/cmp-nvim-lua',

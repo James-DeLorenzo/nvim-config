@@ -15,12 +15,19 @@ vim.g.mapleader = " "
 -- }}}
 
 require('setups.settings')
-require("lazy").setup('plugins')
+require("lazy").setup('plugins', {
+    defaults = {
+        lazy = true
+    },
+    checker = {
+        frequency = 604800
+    }
+})
 -- require('autocommands')
 require('setups.keybinds')
 -- plugin customizations
--- require('setups.feline_setup')
-require('setups.heirline_setup')
+require('setups.feline_setup')
+-- require('setups.heirline_setup')
 require('setups.lsp_setup')
 
 -- vim: foldmethod=marker foldlevel=0

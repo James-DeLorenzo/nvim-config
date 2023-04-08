@@ -1,27 +1,32 @@
 return {
     -- basic nvim plugins {{{
-    'ThePrimeagen/vim-be-good',
+    {
+        'ThePrimeagen/vim-be-good',
+        cmd = 'VimBeGood'
+    },
     {
         "folke/which-key.nvim",
+        lazy = false,
         config = function()
             vim.o.timeout = true
             vim.o.timeoutlen = 300
-            require("which-key").setup({
-                -- your configuration comes here
-                -- or leave it empty to use the default settings
-                -- refer to the configuration section below
-            })
+            require('which-key').setup {
+            }
         end,
     },
     {
         'pwntester/octo.nvim',
+        cmd = 'Octo',
+        enabled = function()
+            return 0 == os.execute("git status &> /dev/null")
+        end,
         dependencies = {
             'nvim-lua/plenary.nvim',
             'nvim-telescope/telescope.nvim',
             'kyazdani42/nvim-web-devicons',
         },
         config = function()
-            require "octo".setup()
+            require('octo').setup()
         end
     },
     {
@@ -32,20 +37,22 @@ return {
         }
     },
     'kyazdani42/nvim-web-devicons',
-    'famiu/bufdelete.nvim',
+    {
+        'famiu/bufdelete.nvim',
+        event = 'BufEnter'
+    },
     'folke/trouble.nvim',
     {
         'lukas-reineke/indent-blankline.nvim',
-        config = function()
-            require("indent_blankline").setup {
-                show_current_context = true,
-                show_current_context_start = true,
-                use_treesitter = true,
-                space_char_highlight_list = { "Float" }
-                -- use_treesitter_scope = true,
+        event = 'BufEnter',
+        opts = {
+            show_current_context = true,
+            show_current_context_start = true,
+            use_treesitter = true,
+            space_char_highlight_list = { "Float" }
+            -- use_treesitter_scope = true,
 
-            }
-        end
+        }
     },
     {
         'ggandor/leap.nvim',
@@ -64,12 +71,11 @@ return {
     },
     {
         'windwp/nvim-autopairs',
-        config = function()
-            require('nvim-autopairs').setup {}
-        end
+        event = 'BufReadPost'
     },
     {
         'lewis6991/gitsigns.nvim',
+        event = 'BufReadPost',
         dependencies = {
             'nvim-lua/plenary.nvim'
         },
@@ -80,22 +86,22 @@ return {
             { '<leader>gd',  '<CMD>Gitsigns diffthis<CR>',     silent = true, noremap = true },
             { '<leader>gbr', '<CMD>Gitsigns reset_buffer<CR>', silent = true, noremap = true }
         },
-        config = {
+        opts = {
             signcolumn = true,
             numhl = false,
         }
     },
     {
         'numToStr/Comment.nvim',
-        config = function()
-            require('Comment').setup {}
-            local ft = require('Comment.ft')
-            ft.terraform = '#%s'
-        end
+        event = 'BufReadPost'
+        -- config = function()
+        --     require('Comment').setup {}
+        --     local ft = require('Comment.ft')
+        --     ft.terraform = '#%s'
+        -- end
     },
     {
         'gelguy/wilder.nvim',
-        lazy = false,
         dependencies = {
             'romgrk/fzy-lua-native',
             'roxma/nvim-yarp'

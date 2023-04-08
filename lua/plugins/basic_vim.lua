@@ -3,7 +3,12 @@ return {
         'tpope/vim-sensible',
         lazy = false
     },
-    'tpope/vim-fugitive',
+    {
+        'tpope/vim-fugitive',
+        enabled = function()
+            return 0 == os.execute("git status &> /dev/null")
+        end,
+    },
     {
         'matze/vim-move',
         init = function()
