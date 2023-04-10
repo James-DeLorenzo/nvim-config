@@ -71,7 +71,10 @@ return {
     },
     {
         'windwp/nvim-autopairs',
-        event = 'BufReadPost'
+        event = 'BufReadPost',
+        config = function()
+            require('nvim-autopairs').setup()
+        end
     },
     {
         'lewis6991/gitsigns.nvim',
@@ -93,12 +96,12 @@ return {
     },
     {
         'numToStr/Comment.nvim',
-        event = 'BufReadPost'
-        -- config = function()
-        --     require('Comment').setup {}
-        --     local ft = require('Comment.ft')
-        --     ft.terraform = '#%s'
-        -- end
+        event = 'BufReadPost',
+        config = function()
+            require('Comment').setup {}
+            --     local ft = require('Comment.ft')
+            --     ft.terraform = '#%s'
+        end
     },
     {
         'gelguy/wilder.nvim',
@@ -196,5 +199,11 @@ return {
             require('colorizer').setup({ '*', }, { names = false, RRGGBBAA = true, })
         end
     },
+    {
+        'mbbill/undotree',
+        keys = {
+            { '<leader>u', vim.cmd.UndotreeToggle, silent = true, noremap = true, desc = "Open UndoTree" }
+        }
+    }
     -- }}}
 }
