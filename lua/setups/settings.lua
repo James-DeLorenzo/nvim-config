@@ -1,20 +1,17 @@
-vim.o.syntax = 'enable'
-vim.o.signcolumn = 'yes'
-vim.o.background = 'dark'
-vim.o.colorcolumn = "80,100,120,200"
-vim.o.termguicolors = true
+vim.o.syntax         = 'enable'
+vim.o.background     = 'dark'
+vim.o.colorcolumn    = "80,100,120,200"
+vim.o.termguicolors  = true
 
-vim.o.number = true
+vim.o.number         = true
 vim.o.relativenumber = true
 
-vim.o.mouse = 'a'
-vim.o.mousefocus = true
--- vim.o.foldmethod = "marker"
-vim.o.hls = true
-vim.o.wrap = false
-vim.o.scrolloff = 3
-vim.o.hidden = true
-vim.o.cmdheight = 2
+vim.o.mouse          = 'a'
+vim.o.mousefocus     = true
+vim.o.hls            = true
+vim.o.wrap           = false
+vim.o.scrolloff      = 3
+vim.o.hidden         = true
 vim.opt.iskeyword:append({ '-' })
 vim.opt.nrformats:append({ 'unsigned' })
 -- tab stuffs
@@ -36,15 +33,22 @@ vim.o.foldexpr = "nvim_treesitter#foldexpr()"
 vim.o.foldlevelstart = 99
 vim.opt.formatoptions:remove({ 'o' })
 
-vim.o.updatetime = 300
-vim.o.timeout = true
-vim.o.timeoutlen = 500
+vim.o.updatetime   = 300
+vim.o.timeout      = true
+vim.o.timeoutlen   = 500
 
-vim.o.laststatus = 3
+vim.o.splitright   = true
+vim.o.splitbelow   = true
+vim.o.pumblend     = 45
 
-vim.o.splitright = true
-vim.o.splitbelow = true
-vim.o.pumblend = 45
+vim.opt.undodir    = os.getenv("HOME") .. "/.vim/undodir"
+vim.opt.undofile   = true
 
-vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
-vim.opt.undofile = true
+vim.o.signcolumn   = 'yes'
+vim.o.statuscolumn = '%r%=%s'
+
+vim.o.cmdheight    = 0
+vim.o.laststatus   = 3
+vim.o.showcmd      = false
+vim.o.showcmdloc   = 'statusline'
+vim.o.showmode     = false
