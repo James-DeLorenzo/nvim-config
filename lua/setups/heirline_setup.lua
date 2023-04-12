@@ -2,6 +2,7 @@ local heirline = require("heirline")
 local conditions = require('heirline.conditions')
 local utils = require('heirline.utils')
 local lush = require('lush')
+local buf = vim.b
 local hsl = lush.hsl
 
 local separators = {
@@ -27,38 +28,6 @@ local separators = {
     circle = '●',
 }
 
-local navic = {
-    condition = function() return require("nvim-navic").is_available() end,
-    provider = function()
-        return require("nvim-navic").get_location({ highlight = true })
-    end,
-    update = 'CursorMoved'
-}
-
-local function get_empty_sep(bg)
-    return {
-        provider = ' ',
-        hl = {
-            bg = bg
-        }
-    }
-end
-
-local function get_left_sep(sep, hl)
-    return {
-        provider = sep or separators.left_rounded,
-        hl = hl,
-        -- always_visible = always or false
-    }
-end
-
-local function get_right_sep(sep, hl)
-    return {
-        provider = sep or separators.right_rounded,
-        hl = hl,
-        -- always_visible = always or false
-    }
-end
 
 local color_codes = {
     -- colors {{{
@@ -132,15 +101,37 @@ local mode_colors = {
     t = "green",
 }
 
-local function get_vi_blocks(seps, middle_provider)
+local function get_empty_sep(hl)
+    return {
+        provider = ' ',
+        hl = hl
+    }
+end
+
+local function get_left_sep(sep, hl)
+    return {
+        provider = sep or separators.block,
+        hl = hl
+    }
+end
+
+local function get_right_sep(sep, hl)
+    return {
+        provider = sep or separators.block,
+        hl = hl
+    }
+end
+
+local function get_vi_color()
+    return mode_colors[vim.fn.mode(1):sub(1, 1)]
+end
+
+local function get_vi_blocks(seps, middle_provider, final_color)
     return {
         -- file name with vi color
-        get_left_sep(seps[1] or nil, function(self) return { fg = self.get_color() } end),
-        { provider = middle_provider, hl = function(self) return { bg = self.get_color() } end },
-        get_right_sep(seps[2] or nil, function(self) return { fg = self.get_color(), bg = 'oceanblue' } end),
-        static = {
-            get_color = function(self) return mode_colors[vim.fn.mode(1):sub(1, 1)] end,
-        },
+        get_left_sep(seps[1] or nil, function() return { fg = get_vi_color() } end),
+        { provider = middle_provider, hl = function() return { bg = get_vi_color() } end },
+        get_right_sep(seps[2] or nil, function() return { fg = get_vi_color(), bg = final_color } end),
         update = { "ModeChanged" }
     }
 end
@@ -150,60 +141,197 @@ local function get_diagnostics_count(severity)
     return count ~= 0 and tostring(count) or ''
 end
 
-local align = { provider = "%=", hl = { bg = 'bg' } }
-
-local left_section = {
-    get_vi_blocks({ separators.block, separators.right_rounded }, "%f"),
+local navic = {
+    get_empty_sep('bg'),
     {
-        { provider = "%l:%c", hl = { bg = 'oceanblue' } },
-        get_right_sep(nil, { fg = 'oceanblue', bg = 'cyan' })
-    },
-    {
-        {
-            get_left_sep(separators.block, { fg = 'cyan' }),
-            {
-                provider = function() return get_diagnostics_count(vim.diagnostic.severity.HINT) end,
-                hl = { bg = 'cyan', fg = 'black' }
-            },
-            get_right_sep(nil, { bg = 'skyblue', fg = 'cyan' }),
-        },
-        {
-            {
-                provider = function() return get_diagnostics_count(vim.diagnostic.severity.INFO) end,
-                hl = { bg = 'skyblue', fg = 'black' }
-            },
-            get_right_sep(nil, { bg = 'yellow', fg = 'skyblue' }),
-        },
-        {
-            {
-                provider = function() return get_diagnostics_count(vim.diagnostic.severity.WARN) end,
-                hl = { bg = 'yellow', fg = 'black' }
-            },
-            get_right_sep(nil, { bg = 'red', fg = 'yellow' }),
-        },
-        {
-            {
-                provider = function() return get_diagnostics_count(vim.diagnostic.severity.ERROR) end,
-                hl = { bg = 'red', fg = 'black' }
-            },
-            get_right_sep(nil, { bg = 'bg', fg = 'red' }),
-        },
+        condition = function() return require("nvim-navic").is_available() end,
+        provider = function()
+            return require("nvim-navic").get_location()
+        end,
+        update = 'CursorMoved'
     }
 }
 
+
+local align = { provider = "%=", hl = { bg = 'bg' } }
+
+local git = {
+    condition = conditions.is_git_repo,
+    init = function(self)
+        self.status_dict = buf.gitsigns_status_dict
+        self.has_changes = self.status_dict.added ~= 0 or self.status_dict.removed ~= 0 or self.status_dict.changed ~= 0
+    end,
+    update = { "ModeChanged" },
+    hl = function() return { fg = 'yellow' } end,
+    {
+        -- git branch name
+        provider = function(self)
+            return " " .. self.status_dict.head
+        end,
+        hl = { bold = true }
+    },
+    -- You could handle delimiters, icons and counts similar to Diagnostics
+    {
+        condition = function(self)
+            return self.has_changes
+        end,
+        provider = "("
+    },
+    {
+        provider = function(self)
+            local count = self.status_dict.added or 0
+            return count > 0 and ("+" .. count)
+        end,
+        hl = { fg = "green" },
+    },
+    {
+        provider = function(self)
+            local count = self.status_dict.removed or 0
+            return count > 0 and ("-" .. count)
+        end,
+        hl = { fg = "red" },
+    },
+    {
+        provider = function(self)
+            local count = self.status_dict.changed or 0
+            return count > 0 and ("~" .. count)
+        end,
+        hl = { fg = "orange" },
+    },
+    {
+        condition = function(self)
+            return self.has_changes
+        end,
+        provider = ")",
+    },
+}
+
+local Diagnostics = {
+    condition = conditions.has_diagnostics,
+    -- static = {
+    --     error_icon = vim.fn.sign_getdefined("DiagnosticSignError")[1].text,
+    --     warn_icon = vim.fn.sign_getdefined("DiagnosticSignWarn")[1].text,
+    --     info_icon = vim.fn.sign_getdefined("DiagnosticSignInfo")[1].text,
+    --     hint_icon = vim.fn.sign_getdefined("DiagnosticSignHint")[1].text,
+    -- },
+    init = function(self)
+        self.errors = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.ERROR })
+        self.warnings = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.WARN })
+        self.hints = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.HINT })
+        self.info = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.INFO })
+    end,
+    update = { "DiagnosticChanged", "BufEnter" },
+    {
+        provider = "![",
+    },
+    {
+        provider = function(self)
+            -- 0 is just another output, we can decide to print it or not!
+            return self.errors > 0 and (self.errors .. " ")
+        end,
+        hl = { fg = "red" },
+    },
+    {
+        provider = function(self)
+            return self.warnings > 0 and (self.warnings .. " ")
+        end,
+        hl = { fg = "yellow" },
+    },
+    {
+        provider = function(self)
+            return self.info > 0 and (self.info .. " ")
+        end,
+        hl = { fg = "skyblue" },
+    },
+    {
+        provider = function(self)
+            return self.hints > 0 and (self.hints)
+        end,
+        hl = { fg = "cyan" },
+    },
+    {
+        provider = "]",
+    },
+}
+local diags = {
+    condition = conditions.is_git_repo,
+    init = function(self)
+        self.status_dict = buf.gitsigns_status_dict
+        self.has_changes = self.status_dict.added ~= 0 or self.status_dict.removed ~= 0 or self.status_dict.changed ~= 0
+    end,
+    update = { "ModeChanged" },
+    hl = function() return { fg = 'yellow' } end,
+    {
+        hl = { fg = 'cyan' },
+        {
+            provider = function() return get_diagnostics_count(vim.diagnostic.severity.HINT) end,
+            -- hl = { bg = 'cyan', fg = 'black' }
+        },
+        { provider = "," }
+    },
+    {
+        hl = { fg = 'skyblue' },
+        {
+            provider = function() return get_diagnostics_count(vim.diagnostic.severity.INFO) end,
+        },
+        { provider = "," }
+    },
+    {
+        hl = { fg = 'yellow' },
+        {
+            provider = function() return get_diagnostics_count(vim.diagnostic.severity.WARN) end,
+        },
+        { provider = "," }
+    },
+    {
+        hl = { fg = 'red' },
+        {
+            provider = function() return get_diagnostics_count(vim.diagnostic.severity.ERROR) end,
+        },
+    },
+}
+
+local left_section = {
+    get_vi_blocks({ separators.block, separators.right_rounded }, "%t", 'oceanblue'),
+    {
+        { provider = " %l:%c ", hl = { bg = 'oceanblue' } },
+        get_right_sep(separators.right_filled, { fg = 'oceanblue' })
+    },
+    Diagnostics
+}
+
 local center_section = {
+    { provider = separators.vertical_bar_thin },
     navic,
     align
 }
 
 local right_section = {
-
+    { provider = " %S " },
+    git,
+    {
+        hl = { fg = 'skyblue' },
+        get_left_sep(separators.vertical_bar_thin),
+        { provider = "%Y" },
+        get_right_sep(separators.vertical_bar_thin)
+    },
+    { provider = "%l/%L:%c" },
+    {
+        get_left_sep(nil, { fg = 'bg' }),
+        { provider = "%p%%" }
+    }
 }
 
 local base_line = {
+    hl = { fg = 'fg', bg = 'bg' },
     left_section,
     center_section,
     right_section
+}
+
+local tester = {
+    { provider = "0x%B " },
+    { provider = "hex-byte: %O " },
 }
 
 heirline.setup({

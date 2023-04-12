@@ -5,6 +5,13 @@ return {
     },
     {
         'rebelot/heirline.nvim',
-        dependencies = { "uloco/bluloco.nvim" }
+        event = 'BufReadPre',
+        dependencies = {
+            'lewis6991/gitsigns.nvim',
+            "uloco/bluloco.nvim"
+        },
+        config = function()
+            require('setups.heirline_setup')
+        end
     }
 }

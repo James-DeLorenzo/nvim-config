@@ -26,7 +26,7 @@ require("lazy").setup('plugins', {
 -- require('autocommands')
 require('setups.keybinds')
 -- plugin customizations
-require('setups.feline_setup')
+-- require('setups.feline_setup')
 -- require('setups.heirline_setup')
 require('setups.lsp_setup')
 

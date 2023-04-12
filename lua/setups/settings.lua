@@ -33,22 +33,22 @@ vim.o.foldexpr = "nvim_treesitter#foldexpr()"
 vim.o.foldlevelstart = 99
 vim.opt.formatoptions:remove({ 'o' })
 
-vim.o.updatetime   = 300
-vim.o.timeout      = true
-vim.o.timeoutlen   = 500
+vim.o.updatetime = 300
+vim.o.timeout    = true
+vim.o.timeoutlen = 500
 
-vim.o.splitright   = true
-vim.o.splitbelow   = true
-vim.o.pumblend     = 45
+vim.o.splitright = true
+vim.o.splitbelow = true
+vim.o.pumblend   = 45
 
-vim.opt.undodir    = os.getenv("HOME") .. "/.vim/undodir"
-vim.opt.undofile   = true
+vim.opt.undodir  = os.getenv("HOME") .. "/.vim/undodir"
+vim.opt.undofile = true
 
-vim.o.signcolumn   = 'yes'
-vim.o.statuscolumn = '%r%=%s'
+vim.o.signcolumn = 'yes'
+-- vim.o.statuscolumn = '%r%=%s'
 
-vim.o.cmdheight    = 0
-vim.o.laststatus   = 3
-vim.o.showcmd      = false
-vim.o.showcmdloc   = 'statusline'
-vim.o.showmode     = false
+vim.o.cmdheight  = 0
+vim.o.laststatus = 3
+vim.o.showcmd    = true
+vim.o.showcmdloc = 'statusline'
+vim.o.showmode   = false

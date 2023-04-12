@@ -22,6 +22,7 @@ return {
                 }
             }
         },
+        cmd = 'Telescope',
         keys = {
             { '<leader>fa', '<CMD>Telescope lsp_code_actions<CR>', noremap = true },
             { '<leader>fb', '<CMD>Telescope buffers<CR>',          noremap = true },
