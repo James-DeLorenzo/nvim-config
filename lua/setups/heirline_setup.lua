@@ -129,9 +129,9 @@ end
 local function get_vi_blocks(seps, middle_provider, final_color)
     return {
         -- file name with vi color
-        get_left_sep(seps[1] or nil, function() return { fg = get_vi_color() } end),
+        get_left_sep(seps and seps[1] or nil, function() return { fg = get_vi_color() } end),
         { provider = middle_provider, hl = function() return { bg = get_vi_color() } end },
-        get_right_sep(seps[2] or nil, function() return { fg = get_vi_color(), bg = final_color } end),
+        get_right_sep(seps and seps[2] or nil, function() return { fg = get_vi_color(), bg = final_color } end),
         update = { "ModeChanged" }
     }
 end
@@ -142,30 +142,105 @@ local function get_diagnostics_count(severity)
 end
 
 local navic = {
-    get_empty_sep({ bg = 'bg' }),
+    condition = function() return require("nvim-navic").is_available() end,
+    hl = { bg = 'skyblue', bold = true },
+    update = { 'CursorMoved', 'BufReadPost' },
+    get_empty_sep(nil),
     {
-        condition = function() return require("nvim-navic").is_available() end,
         provider = function()
             return require("nvim-navic").get_location()
         end,
-        update = 'CursorMoved'
     }
 }
 
+local HelpFileName = {
+    condition = function()
+        return vim.bo.filetype == "help"
+    end,
+    provider = function()
+        local filename = vim.api.nvim_buf_get_name(0)
+        return vim.fn.fnamemodify(filename, ":t")
+    end,
+    hl = { fg = colors.blue },
+}
+
+local SearchCount = {
+    condition = function()
+        return vim.v.hlsearch ~= 0 and vim.o.cmdheight == 0
+    end,
+    init = function(self)
+        local ok, search = pcall(vim.fn.searchcount)
+        if ok and search.total then
+            self.search = search
+        end
+    end,
+    provider = function(self)
+        local search = self.search
+        return string.format("[%d/%d]", search.current, math.min(search.total, search.maxcount))
+    end,
+}
+
+local MacroRec = {
+    condition = function()
+        return vim.fn.reg_recording() ~= "" and vim.o.cmdheight == 0
+    end,
+    provider = " ",
+    hl = { fg = "orange", bold = true },
+    utils.surround({ "[", "]" }, nil, {
+        provider = function()
+            return vim.fn.reg_recording()
+        end,
+        hl = { fg = "green", bold = true },
+    }),
+    update = {
+        "RecordingEnter",
+        "RecordingLeave",
+        -- redraw the statusline on recording events
+        -- Note: this is only required for Neovim < 0.9.0. Newer versions of
+        -- Neovim ensure `statusline` is redrawn on those events.
+        callback = vim.schedule_wrap(function()
+            vim.cmd("redrawstatus")
+        end),
+    }
+}
+
+local WorkDir = {
+    static = {
+        base_color = "oceanblue"
+    },
+    {
+        provider = function()
+            local icon = (vim.fn.haslocaldir(0) == 1 and "l" or "g") .. " " .. " "
+            local cwd = vim.fn.getcwd(0)
+            cwd = vim.fn.fnamemodify(cwd, ":~")
+            if not conditions.width_percent_below(#cwd, 0.25) then
+                cwd = vim.fn.pathshorten(cwd)
+            end
+            local trail = cwd:sub(-1) == '/' and '' or "/"
+            return icon .. cwd .. trail
+        end,
+        hl = function(self) return { bg = self.base_color, bold = true } end,
+    },
+    get_right_sep(separators.right_filled, function(self) return { fg = self.base_color, bg = get_vi_color() } end)
+}
 
 local LSPActive = {
+    on_click  = {
+        callback = function()
+            vim.defer_fn(function()
+                vim.cmd("LspInfo")
+            end, 100)
+        end,
+        name = "heirline_LSP",
+    },
     condition = conditions.lsp_attached,
     update    = { 'LspAttach', 'LspDetach' },
-    -- You can keep it simple,
-    -- provider = " [LSP]",
-
-    -- Or complicate things a bit and get the servers names
     provider  = function()
         local names = {}
         for i, server in pairs(vim.lsp.get_active_clients({ bufnr = 0 })) do
             table.insert(names, server.name)
         end
-        return " [" .. table.concat(names, " ") .. "]"
+        return " [" .. table.concat(names, ",") .. "]"
     end,
     hl        = { fg = "green", bold = true },
 }
@@ -224,6 +299,14 @@ local git = {
 }
 
 local Diagnostics = {
+    on_click = {
+        callback = function()
+            require("trouble").toggle({ mode = "document_diagnostics" })
+            -- or
+            -- vim.diagnostic.setqflist()
+        end,
+        name = "heirline_diagnostics",
+    },
     condition = conditions.has_diagnostics,
     -- static = {
     --     error_icon = vim.fn.sign_getdefined("DiagnosticSignError")[1].text,
@@ -273,22 +356,26 @@ local Diagnostics = {
 
 local left_section = {
     {
-        { provider = " %l:%03c ", hl = { bg = 'oceanblue' } },
-        get_right_sep(separators.block, { fg = 'oceanblue' })
+        update = { "ModeChanged" },
+        { provider = " %03l:%03c ", hl = function() return { bg = get_vi_color() } end },
     },
-    Diagnostics,
-    get_vi_blocks({ separators.block, separators.right_filled }, "%f", 'bg'),
+    WorkDir,
+    get_vi_blocks({ nil, separators.right_filled }, "%f", "skyblue"),
+    -- align
 }
 
 local center_section = {
-    -- { provider = separators.vertical_bar_thin },
     navic,
-    align
+    align,
+    { provider = " %S " },
 }
 
 local right_section = {
-    { provider = " %S " },
+    HelpFileName,
+    SearchCount,
+    MacroRec,
     git,
+    Diagnostics,
     LSPActive,
     {
         update = { "BufEnter" },
