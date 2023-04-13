@@ -5,7 +5,7 @@ return {
     },
     {
         'rebelot/heirline.nvim',
-        event = 'BufReadPre',
+        event = 'VimEnter',
         dependencies = {
             'lewis6991/gitsigns.nvim',
             "uloco/bluloco.nvim"

@@ -142,7 +142,7 @@ local function get_diagnostics_count(severity)
 end
 
 local navic = {
-    get_empty_sep('bg'),
+    get_empty_sep({ bg = 'bg' }),
     {
         condition = function() return require("nvim-navic").is_available() end,
         provider = function()
@@ -152,6 +152,23 @@ local navic = {
     }
 }
 
+
+local LSPActive = {
+    condition = conditions.lsp_attached,
+    update    = { 'LspAttach', 'LspDetach' },
+    -- You can keep it simple,
+    -- provider = " [LSP]",
+
+    -- Or complicate things a bit and get the servers names
+    provider  = function()
+        local names = {}
+        for i, server in pairs(vim.lsp.get_active_clients({ bufnr = 0 })) do
+            table.insert(names, server.name)
+        end
+        return " [" .. table.concat(names, " ") .. "]"
+    end,
+    hl        = { fg = "green", bold = true },
+}
 
 local align = { provider = "%=", hl = { bg = 'bg' } }
 
@@ -253,55 +270,18 @@ local Diagnostics = {
         provider = "]",
     },
 }
-local diags = {
-    condition = conditions.is_git_repo,
-    init = function(self)
-        self.status_dict = buf.gitsigns_status_dict
-        self.has_changes = self.status_dict.added ~= 0 or self.status_dict.removed ~= 0 or self.status_dict.changed ~= 0
-    end,
-    update = { "ModeChanged" },
-    hl = function() return { fg = 'yellow' } end,
-    {
-        hl = { fg = 'cyan' },
-        {
-            provider = function() return get_diagnostics_count(vim.diagnostic.severity.HINT) end,
-            -- hl = { bg = 'cyan', fg = 'black' }
-        },
-        { provider = "," }
-    },
-    {
-        hl = { fg = 'skyblue' },
-        {
-            provider = function() return get_diagnostics_count(vim.diagnostic.severity.INFO) end,
-        },
-        { provider = "," }
-    },
-    {
-        hl = { fg = 'yellow' },
-        {
-            provider = function() return get_diagnostics_count(vim.diagnostic.severity.WARN) end,
-        },
-        { provider = "," }
-    },
-    {
-        hl = { fg = 'red' },
-        {
-            provider = function() return get_diagnostics_count(vim.diagnostic.severity.ERROR) end,
-        },
-    },
-}
 
 local left_section = {
-    get_vi_blocks({ separators.block, separators.right_rounded }, "%t", 'oceanblue'),
     {
-        { provider = " %l:%c ", hl = { bg = 'oceanblue' } },
-        get_right_sep(separators.right_filled, { fg = 'oceanblue' })
+        { provider = " %l:%03c ", hl = { bg = 'oceanblue' } },
+        get_right_sep(separators.block, { fg = 'oceanblue' })
     },
-    Diagnostics
+    Diagnostics,
+    get_vi_blocks({ separators.block, separators.right_filled }, "%f", 'bg'),
 }
 
 local center_section = {
-    { provider = separators.vertical_bar_thin },
+    -- { provider = separators.vertical_bar_thin },
     navic,
     align
 }
@@ -309,16 +289,19 @@ local center_section = {
 local right_section = {
     { provider = " %S " },
     git,
+    LSPActive,
     {
+        update = { "BufEnter" },
         hl = { fg = 'skyblue' },
+        -- hl = function() return { fg = utils.get_highlight("Type").fg, bold = true } end,
         get_left_sep(separators.vertical_bar_thin),
         { provider = "%Y" },
         get_right_sep(separators.vertical_bar_thin)
     },
-    { provider = "%l/%L:%c" },
+    -- { provider = "%l/%L:%c" },
     {
+        { provider = "%-p%%" },
         get_left_sep(nil, { fg = 'bg' }),
-        { provider = "%p%%" }
     }
 }
 
