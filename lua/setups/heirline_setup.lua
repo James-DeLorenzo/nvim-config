@@ -143,7 +143,7 @@ end
 
 local navic = {
     condition = function() return require("nvim-navic").is_available() end,
-    hl = { bg = 'skyblue', bold = true },
+    hl = { fg = 'bg', bg = 'skyblue' },
     update = { 'CursorMoved', 'BufReadPost' },
     get_empty_sep(nil),
     {
@@ -357,7 +357,8 @@ local Diagnostics = {
 local left_section = {
     {
         update = { "ModeChanged" },
-        { provider = " %03l:%03c ", hl = function() return { bg = get_vi_color() } end },
+        { provider = " %03l:%03c ",           hl = function() return { bg = get_vi_color() } end },
+        { provider = separators.right_filled, hl = function() return { fg = get_vi_color(), bg = 'oceanblue' } end },
     },
     WorkDir,
     get_vi_blocks({ nil, separators.right_filled }, "%f", "skyblue"),
