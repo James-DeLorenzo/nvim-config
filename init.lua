@@ -20,7 +20,7 @@ require("lazy").setup('plugins', {
         lazy = true
     },
     checker = {
-        frequency = 604800
+        frequency = 86400
     }
 })
 -- require('autocommands')

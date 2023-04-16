@@ -28,77 +28,76 @@ local separators = {
     circle = '●',
 }
 
-
 local color_codes = {
     -- colors {{{
-    wine_red = hsl("#9c1e37"),
-    red = hsl("#ff0000"),
-    off_red = hsl("#f81141"),
-    rose = hsl("#fc4a6d"),
-    brown = hsl("#745b53"),
-    clay_orange = hsl("#fd7e57"),
-    peach = hsl("#ff936a"),
-    dandelion = hsl("#ffcc00"),
-    dark_dandelion = hsl("#ffa023"),
-    sun = hsl("#f9c859"),
-    yellow = hsl("#ffff00"),
-    dark_green = hsl("#237236"),
-    green = hsl("#3fc56b"),
-    lime_green = hsl("#92f535"),
-    baby_blue = hsl("#8bcdef"),
-    light_blue = hsl("#10b1fe"),
-    off_blue = hsl("#285bff"),
-    blue = hsl("#0000ff"),
-    light_purple = hsl("#9f7efe"),
-    magenta = hsl("#ff00ff"),
-    dark_grey = hsl("#636d83"),
-    grey = hsl("#abb2bf"),
-    light_grey = hsl("#cdd3e0"),
-    white = hsl("#f9f9f9"),
-    pure_white = hsl("#ffffff"),
-    blue_grey = hsl("#22252a"),
-    shadow_blue = hsl("#282c34"),
-    black = hsl("#000000"),
+    wine_red = tostring(hsl("#9c1e37")),
+    red = tostring(hsl("#ff0000")),
+    off_red = tostring(hsl("#f81141")),
+    rose = tostring(hsl("#fc4a6d")),
+    brown = tostring(hsl("#745b53")),
+    clay_orange = tostring(hsl("#fd7e57")),
+    peach = tostring(hsl("#ff936a")),
+    dandelion = tostring(hsl("#ffcc00")),
+    dark_dandelion = tostring(hsl("#ffa023")),
+    sun = tostring(hsl("#f9c859")),
+    yellow = tostring(hsl("#ffff00")),
+    dark_green = tostring(hsl("#237236")),
+    green = tostring(hsl("#3fc56b")),
+    lime_green = tostring(hsl("#92f535")),
+    baby_blue = tostring(hsl("#8bcdef")),
+    light_blue = tostring(hsl("#10b1fe")),
+    off_blue = tostring(hsl("#285bff")),
+    blue = tostring(hsl("#0000ff")),
+    light_purple = tostring(hsl("#9f7efe")),
+    magenta = tostring(hsl("#ff00ff")),
+    dark_grey = tostring(hsl("#636d83")),
+    grey = tostring(hsl("#abb2bf")),
+    light_grey = tostring(hsl("#cdd3e0")),
+    white = tostring(hsl("#f9f9f9")),
+    pure_white = tostring(hsl("#ffffff")),
+    blue_grey = tostring(hsl("#22252a")),
+    shadow_blue = tostring(hsl("#282c34")),
+    black = tostring(hsl("#000000")),
     -- }}}
     -- vibrants {{{
-    braker_blue = hsl("#28e3eb"),
-    burnt_orange = hsl("#ffa023"),
-    pink = hsl("#ff78ff"),
-    poison_green = hsl("#00ff95")
+    braker_blue = tostring(hsl("#28e3eb")),
+    burnt_orange = tostring(hsl("#ffa023")),
+    pink = tostring(hsl("#ff78ff")),
+    poison_green = tostring(hsl("#00ff95"))
     -- }}}
 }
 
 
 local colors = {
-    bg = tostring(color_codes.blue_grey),
-    black = tostring(color_codes.black),
-    skyblue = tostring(color_codes.light_blue),
-    cyan = tostring(color_codes.braker_blue),
-    fg = tostring(color_codes.light_grey),
-    green = tostring(color_codes.dark_green),
-    oceanblue = tostring(color_codes.off_blue),
-    magenta = tostring(color_codes.magenta),
-    orange = tostring(color_codes.dark_dandelion),
-    red = tostring(color_codes.off_red),
-    violet = tostring(color_codes.light_purple),
-    white = tostring(color_codes.pure_white),
-    yellow = tostring(color_codes.sun),
+    bg = color_codes.blue_grey,
+    black = color_codes.black,
+    skyblue = color_codes.light_blue,
+    cyan = color_codes.braker_blue,
+    fg = color_codes.light_grey,
+    green = color_codes.dark_green,
+    oceanblue = color_codes.off_blue,
+    magenta = color_codes.magenta,
+    orange = color_codes.dark_dandelion,
+    red = color_codes.off_red,
+    violet = color_codes.light_purple,
+    white = color_codes.pure_white,
+    yellow = color_codes.sun,
 }
 
 local mode_colors = {
     ["\22"] = "red",
     ["\19"] = "red",
     ["!"] = "red",
-    n = "green",
+    n = "dark_green",
     i = "red",
-    v = "skyblue",
-    V = "skyblue",
+    v = "light_blue",
+    V = "light_blue",
     s = "orange",
     S = "orange",
     r = "violet",
     R = "violet",
-    c = "green",
-    t = "green",
+    c = "dark_green",
+    t = "dark_green",
 }
 
 local function get_empty_sep(hl)
@@ -145,7 +144,12 @@ local navic = {
     condition = function() return require("nvim-navic").is_available() end,
     hl = { fg = 'bg', bg = 'skyblue' },
     update = { 'CursorMoved', 'BufReadPost' },
-    get_empty_sep(nil),
+    {
+        condition = function() return require("nvim-navic").get_location() ~= '' end,
+        update = 'ModeChanged',
+        provider = separators.right_filled,
+        hl = function() return { fg = 'wine_red' } end
+    },
     {
         provider = function()
             return require("nvim-navic").get_location()
@@ -192,21 +196,12 @@ local MacroRec = {
         end,
         hl = { fg = "green", bold = true },
     }),
-    update = {
-        "RecordingEnter",
-        "RecordingLeave",
-        -- redraw the statusline on recording events
-        -- Note: this is only required for Neovim < 0.9.0. Newer versions of
-        -- Neovim ensure `statusline` is redrawn on those events.
-        callback = vim.schedule_wrap(function()
-            vim.cmd("redrawstatus")
-        end),
-    }
+    update = { "RecordingEnter", "RecordingLeave", }
 }
 
 local WorkDir = {
     static = {
-        base_color = "oceanblue"
+        base_color = "off_blue"
     },
     {
         provider = function()
@@ -221,7 +216,7 @@ local WorkDir = {
         end,
         hl = function(self) return { bg = self.base_color, bold = true } end,
     },
-    get_right_sep(separators.right_filled, function(self) return { fg = self.base_color, bg = get_vi_color() } end)
+    get_right_sep(separators.right_filled, function(self) return { fg = self.base_color, bg = 'wine_red' } end)
 }
 
 local LSPActive = {
@@ -242,19 +237,19 @@ local LSPActive = {
         end
         return " [" .. table.concat(names, ",") .. "]"
     end,
-    hl        = { fg = "green", bold = true },
+    hl        = { fg = "dark_green", bold = true },
 }
 
-local align = { provider = "%=", hl = { bg = 'bg' } }
+local align = { provider = "%=" }
 
 local git = {
     condition = conditions.is_git_repo,
+    -- update = { "BufEnter", "ModeChanged" },
+    hl = function() return { fg = 'sun' } end,
     init = function(self)
         self.status_dict = buf.gitsigns_status_dict
         self.has_changes = self.status_dict.added ~= 0 or self.status_dict.removed ~= 0 or self.status_dict.changed ~= 0
     end,
-    update = { "ModeChanged" },
-    hl = function() return { fg = 'yellow' } end,
     {
         -- git branch name
         provider = function(self)
@@ -355,25 +350,25 @@ local Diagnostics = {
 }
 
 local left_section = {
+    update = { "ModeChanged" },
     {
-        update = { "ModeChanged" },
         { provider = " %03l:%03c ",           hl = function() return { bg = get_vi_color() } end },
-        { provider = separators.right_filled, hl = function() return { fg = get_vi_color(), bg = 'oceanblue' } end },
+        { provider = separators.right_filled, hl = function() return { fg = get_vi_color(), bg = 'off_blue' } end },
     },
     WorkDir,
-    get_vi_blocks({ nil, separators.right_filled }, "%f", "skyblue"),
+    { provider = "%f", hl = { bg = "wine_red" } },
     -- align
 }
 
 local center_section = {
     navic,
     align,
-    { provider = " %S " },
 }
 
 local right_section = {
     HelpFileName,
     SearchCount,
+    -- { provider = " %S " },
     MacroRec,
     git,
     Diagnostics,
@@ -386,11 +381,10 @@ local right_section = {
         { provider = "%Y" },
         get_right_sep(separators.vertical_bar_thin)
     },
-    -- { provider = "%l/%L:%c" },
     {
         { provider = "%-p%%" },
         get_left_sep(nil, { fg = 'bg' }),
-    }
+    },
 }
 
 local base_line = {
@@ -408,6 +402,6 @@ local tester = {
 heirline.setup({
     statusline = base_line,
     opts = {
-        colors = colors
+        colors = color_codes
     }
 })
