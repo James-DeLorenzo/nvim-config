@@ -5,6 +5,7 @@ local lush = require('lush')
 local buf = vim.b
 local hsl = lush.hsl
 
+-- defaults {{{
 local separators = {
     vertical_bar = '┃',
     vertical_bar_thin = '│',
@@ -99,26 +100,19 @@ local mode_colors = {
     c = "dark_green",
     t = "dark_green",
 }
+-- }}}
 
+-- sep_fns {{{
 local function get_empty_sep(hl)
-    return {
-        provider = ' ',
-        hl = hl
-    }
+    return { provider = ' ', hl = hl }
 end
 
 local function get_left_sep(sep, hl)
-    return {
-        provider = sep or separators.block,
-        hl = hl
-    }
+    return { provider = sep or separators.block, hl = hl }
 end
 
 local function get_right_sep(sep, hl)
-    return {
-        provider = sep or separators.block,
-        hl = hl
-    }
+    return { provider = sep or separators.block, hl = hl }
 end
 
 local function get_vi_color()
@@ -128,18 +122,25 @@ end
 local function get_vi_blocks(seps, middle_provider, final_color)
     return {
         -- file name with vi color
-        get_left_sep(seps and seps[1] or nil, function() return { fg = get_vi_color() } end),
-        { provider = middle_provider, hl = function() return { bg = get_vi_color() } end },
-        get_right_sep(seps and seps[2] or nil, function() return { fg = get_vi_color(), bg = final_color } end),
+        get_left_sep(seps and seps[1] or nil, function()
+            return { fg = get_vi_color()
+            }
+        end),
+        { provider = middle_provider, hl = function() return { bg = get_vi_color() } end
+        },
+        get_right_sep(seps and seps[2] or nil, function()
+            return { fg = get_vi_color(), bg = final_color
+            }
+        end),
         update = { "ModeChanged" }
     }
 end
 
-local function get_diagnostics_count(severity)
-    local count = vim.tbl_count(vim.diagnostic.get(0, severity and { severity = severity }))
-    return count ~= 0 and tostring(count) or ''
-end
+-- }}}
 
+-- components {{{
+
+-- navic {{{
 local navic = {
     condition = function() return require("nvim-navic").is_available() end,
     hl = { fg = 'bg', bg = 'skyblue' },
@@ -147,7 +148,7 @@ local navic = {
     {
         condition = function() return require("nvim-navic").get_location() ~= '' end,
         update = 'ModeChanged',
-        provider = separators.right_filled,
+        provider = separators.slant_right,
         hl = function() return { fg = 'wine_red' } end
     },
     {
@@ -156,7 +157,9 @@ local navic = {
         end,
     }
 }
+-- }}}
 
+-- help name {{{
 local HelpFileName = {
     condition = function()
         return vim.bo.filetype == "help"
@@ -167,7 +170,9 @@ local HelpFileName = {
     end,
     hl = { fg = colors.blue },
 }
+-- }}}
 
+-- search {{{
 local SearchCount = {
     condition = function()
         return vim.v.hlsearch ~= 0 and vim.o.cmdheight == 0
@@ -178,12 +183,15 @@ local SearchCount = {
             self.search = search
         end
     end,
+    hl = { fg = 'burnt_orange' },
     provider = function(self)
         local search = self.search
         return string.format("[%d/%d]", search.current, math.min(search.total, search.maxcount))
     end,
 }
+-- }}}
 
+-- macro {{{
 local MacroRec = {
     condition = function()
         return vim.fn.reg_recording() ~= "" and vim.o.cmdheight == 0
@@ -198,7 +206,9 @@ local MacroRec = {
     }),
     update = { "RecordingEnter", "RecordingLeave", }
 }
+-- }}}
 
+-- workdir {{{
 local WorkDir = {
     static = {
         base_color = "off_blue"
@@ -216,9 +226,11 @@ local WorkDir = {
         end,
         hl = function(self) return { bg = self.base_color, bold = true } end,
     },
-    get_right_sep(separators.right_filled, function(self) return { fg = self.base_color, bg = 'wine_red' } end)
+    get_right_sep(separators.slant_right, function(self) return { fg = self.base_color, bg = 'wine_red' } end)
 }
+-- }}}
 
+-- lsp {{{
 local LSPActive = {
     on_click  = {
         callback = function()
@@ -239,9 +251,9 @@ local LSPActive = {
     end,
     hl        = { fg = "dark_green", bold = true },
 }
+-- }}}
 
-local align = { provider = "%=" }
-
+-- git {{{
 local git = {
     condition = conditions.is_git_repo,
     -- update = { "BufEnter", "ModeChanged" },
@@ -262,7 +274,7 @@ local git = {
         condition = function(self)
             return self.has_changes
         end,
-        provider = "("
+        provider = "["
     },
     {
         provider = function(self)
@@ -289,10 +301,12 @@ local git = {
         condition = function(self)
             return self.has_changes
         end,
-        provider = ")",
+        provider = "]",
     },
 }
+-- }}}
 
+-- diag {{{
 local Diagnostics = {
     on_click = {
         callback = function()
@@ -316,9 +330,8 @@ local Diagnostics = {
         self.info = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.INFO })
     end,
     update = { "DiagnosticChanged", "BufEnter" },
-    {
-        provider = "![",
-    },
+    hl = { fg = 'poison_green' },
+    { provider = "![" },
     {
         provider = function(self)
             -- 0 is just another output, we can decide to print it or not!
@@ -348,44 +361,58 @@ local Diagnostics = {
         provider = "]",
     },
 }
+-- }}}
 
+-- filetype {{{
+local filetype = {
+    condition = function() return vim.bo.filetype ~= '' end,
+    hl = { fg = 'skyblue' },
+    -- hl = function() return { fg = utils.get_highlight("Type").fg, bold = true } end,
+    get_left_sep(separators.vertical_bar_thin),
+    { provider = "%Y" },
+    get_right_sep(separators.vertical_bar_thin)
+}
+-- }}}
+
+local align = { provider = "%=" }
+-- }}}
+
+-- Sections {{{
+
+-- left {{{
 local left_section = {
     update = { "ModeChanged" },
     {
-        { provider = " %03l:%03c ",           hl = function() return { bg = get_vi_color() } end },
-        { provider = separators.right_filled, hl = function() return { fg = get_vi_color(), bg = 'off_blue' } end },
+        { provider = " %03l:%03c ",          hl = function() return { bg = get_vi_color() } end },
+        { provider = separators.slant_right, hl = function() return { fg = get_vi_color(), bg = 'off_blue' } end },
     },
     WorkDir,
     { provider = "%f", hl = { bg = "wine_red" } },
     -- align
 }
+-- }}}
 
+-- center {{{
 local center_section = {
     navic,
     align,
+    { provider = " %S " },
 }
+-- }}}
 
+--right {{{
 local right_section = {
     HelpFileName,
     SearchCount,
-    -- { provider = " %S " },
     MacroRec,
     git,
     Diagnostics,
     LSPActive,
-    {
-        update = { "BufEnter" },
-        hl = { fg = 'skyblue' },
-        -- hl = function() return { fg = utils.get_highlight("Type").fg, bold = true } end,
-        get_left_sep(separators.vertical_bar_thin),
-        { provider = "%Y" },
-        get_right_sep(separators.vertical_bar_thin)
-    },
-    {
-        { provider = "%-p%%" },
-        get_left_sep(nil, { fg = 'bg' }),
-    },
+    filetype,
+    { provider = "%-p%%" },
 }
+--}}}
+-- }}}
 
 local base_line = {
     hl = { fg = 'fg', bg = 'bg' },
@@ -405,3 +432,5 @@ heirline.setup({
         colors = color_codes
     }
 })
+
+-- vim: foldmethod=marker foldlevel=0

@@ -208,3 +208,5 @@ return {
     }
     -- }}}
 }
+
+-- vim: foldmethod=marker foldlevel=0
