@@ -31,6 +31,7 @@ vim.o.modeline = true
 vim.wo.foldmethod = "expr"
 vim.o.foldexpr = "nvim_treesitter#foldexpr()"
 vim.o.foldlevelstart = 99
+vim.o.foldcolumn = 'auto:9'
 vim.opt.formatoptions:remove({ 'o' })
 
 vim.o.updatetime = 300
