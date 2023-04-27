@@ -148,7 +148,7 @@ local navic = {
     {
         condition = function() return require("nvim-navic").get_location() ~= '' end,
         update = 'ModeChanged',
-        provider = separators.slant_right,
+        provider = separators.slant_right_2,
         hl = function() return { fg = 'wine_red' } end
     },
     {
@@ -226,7 +226,7 @@ local WorkDir = {
         end,
         hl = function(self) return { bg = self.base_color, bold = true } end,
     },
-    get_right_sep(separators.slant_right, function(self) return { fg = self.base_color, bg = 'wine_red' } end)
+    get_right_sep(separators.slant_right_2, function(self) return { fg = self.base_color, bg = 'wine_red' } end)
 }
 -- }}}
 
@@ -383,8 +383,8 @@ local align = { provider = "%=" }
 local left_section = {
     update = { "ModeChanged" },
     {
-        { provider = " %03l:%03c ",          hl = function() return { bg = get_vi_color() } end },
-        { provider = separators.slant_right, hl = function() return { fg = get_vi_color(), bg = 'off_blue' } end },
+        { provider = " %03l:%03c ",            hl = function() return { bg = get_vi_color() } end },
+        { provider = separators.slant_right_2, hl = function() return { fg = get_vi_color(), bg = 'off_blue' } end },
     },
     WorkDir,
     { provider = "%f", hl = { bg = "wine_red" } },
