@@ -29,5 +29,6 @@ require('setups.keybinds')
 -- require('setups.feline_setup')
 -- require('setups.heirline_setup')
 require('setups.lsp_setup')
+require('setups.treesitter-extras')
 
 -- vim: foldmethod=marker foldlevel=0
