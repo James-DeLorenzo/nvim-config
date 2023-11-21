@@ -5,9 +5,7 @@ return {
     },
     {
         'tpope/vim-fugitive',
-        enabled = function()
-            return 0 == os.execute("git status &> /dev/null")
-        end,
+        event = "VeryLazy"
     },
     {
         'matze/vim-move',

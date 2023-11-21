@@ -51,9 +51,14 @@ mason_lsp.setup_handlers {
             capabilities = capabilities,
             settings = {
                 python = {
-                    venvPath = "/Users/jamesdelorenzo/.virtualenvs",
-                    reportUnnecessaryTypeIgnoreComment = true
-                }
+                    venvPath = "/Users/james.delorenzo/.local/share/virtualenvs/",
+                    analysis = {
+                        diagnosticSeverityOverrides = {
+                            reportUnnecessaryTypeIgnoreComment = "error",
+                            reportTypedDictNotRequiredAccess = "none",
+                        }
+                    }
+                },
             },
             on_attach = function(client, bufnr)
                 if client.server_capabilities.documentSymbolProvider then

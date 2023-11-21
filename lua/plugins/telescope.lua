@@ -38,10 +38,11 @@ return {
             {
                 '<leader>fhf',
                 function() require('telescope.builtin').find_files({ hidden = true }) end,
-                noremap = true
+                noremap = true,
+                desc = "Find hidden files"
             },
             { '<leader>fg',         '<CMD>Telescope live_grep<CR>',                 noremap = true },
-            { '<leader>fh',         '<CMD>Telescope help_tags<CR>',                 noremap = true },
+            -- { '<leader>fh',         '<CMD>Telescope help_tags<CR>',                 noremap = true },
             { '<leader>fl',         '<CMD>Telescope current_buffer_fuzzy_find<CR>', noremap = true },
             { '<leader>fn',         '<CMD>Telescope lsp_document_symbols<CR>',      noremap = true },
             { '<leader>fs',         '<CMD>Telescope grep_string<CR>',               noremap = true },

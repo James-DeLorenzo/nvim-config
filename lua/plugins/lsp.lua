@@ -18,6 +18,7 @@ return {
     {
         'kkharji/lspsaga.nvim',
         dependencies = { 'neovim/nvim-lspconfig' },
+        cmd = "Lspsaga",
         keys = {
             { '<F2>',  '<CMD>Lspsaga rename<CR>',     silent = true, noremap = true },
             { '<F24>', '<CMD>Lspsaga lsp_finder<CR>', silent = true, noremap = true },

@@ -142,7 +142,10 @@ end
 
 -- navic {{{
 local navic = {
-    condition = function() return require("nvim-navic").is_available() end,
+    condition = function()
+        local cwd = vim.fn.getcwd(0)
+        return require("nvim-navic").is_available() and conditions.width_percent_below(#cwd, 0.25)
+    end,
     hl = { fg = 'bg', bg = 'skyblue' },
     update = { 'CursorMoved', 'BufReadPost' },
     {
@@ -218,15 +221,33 @@ local WorkDir = {
             local icon = (vim.fn.haslocaldir(0) == 1 and "l" or "g") .. " " .. " "
             local cwd = vim.fn.getcwd(0)
             cwd = vim.fn.fnamemodify(cwd, ":~")
-            if not conditions.width_percent_below(#cwd, 0.25) then
-                cwd = vim.fn.pathshorten(cwd)
-            end
+            cwd = vim.fn.pathshorten(cwd)
             local trail = cwd:sub(-1) == '/' and '' or "/"
             return icon .. cwd .. trail
         end,
         hl = function(self) return { bg = self.base_color, bold = true } end,
     },
     get_right_sep(separators.slant_right_2, function(self) return { fg = self.base_color, bg = 'wine_red' } end)
+}
+-- }}}
+
+-- filename {{{
+local filename = {
+    {
+        -- provider = vim.fn.pathshorten("%f"),
+        provider = function()
+            local cwd = vim.fn.getcwd(0)
+            cwd = vim.fn.fnamemodify(cwd, ":~:.")
+            local filepath = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ":~:.")
+            filepath = vim.fn.substitute(filepath, cwd, '', '')
+            filepath = vim.fn.substitute(filepath, "~", '', '')
+            if not conditions.width_percent_below(#cwd, 0.25) then
+                filepath = vim.fn.pathshorten(filepath)
+            end
+            return filepath
+        end,
+        hl = { bg = "wine_red" },
+    },
 }
 -- }}}
 
@@ -387,7 +408,7 @@ local left_section = {
         { provider = separators.slant_right_2, hl = function() return { fg = get_vi_color(), bg = 'off_blue' } end },
     },
     WorkDir,
-    { provider = "%f", hl = { bg = "wine_red" } },
+    filename,
     -- align
 }
 -- }}}

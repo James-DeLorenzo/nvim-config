@@ -45,12 +45,19 @@ return {
     {
         'lukas-reineke/indent-blankline.nvim',
         event = 'BufEnter',
+        main = "ibl",
         opts = {
-            show_current_context = true,
-            show_current_context_start = true,
-            use_treesitter = true,
-            space_char_highlight_list = { "Float" }
-            -- use_treesitter_scope = true,
+            scope = {
+                show_start = true,
+                show_end = true,
+                highlight = { "Keyword" }
+            },
+            whitespace = {
+                highlight = { "Whitespace" }
+            },
+            indent = {
+                highlight = { "Comment" }
+            },
 
         }
     },
