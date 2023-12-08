@@ -4,7 +4,6 @@ return {
         event = 'BufEnter',
         main = 'nvim-treesitter.configs',
         dependencies = {
-            'HiPhish/nvim-ts-rainbow2',
             'nvim-treesitter/nvim-treesitter-refactor',
             'nvim-treesitter/playground',
             'nvim-treesitter/nvim-treesitter-context'
@@ -20,11 +19,6 @@ return {
                 -- Using this option may slow down your editor, and you may see some duplicate highlights.
                 -- Instead of true it can also be a list of languages
                 additional_vim_regex_highlighting = false,
-            },
-            -- ts-rainbow
-            rainbow = {
-                enable = true,
-                highlight_middle = false
             },
             -- refactor
             refactor = {

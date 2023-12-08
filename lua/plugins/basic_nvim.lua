@@ -44,21 +44,21 @@ return {
     'folke/trouble.nvim',
     {
         'lukas-reineke/indent-blankline.nvim',
+        main = "ibl",
         event = 'BufEnter',
         main = "ibl",
         opts = {
+            indent = {
+                smart_indent_cap = true,
+                highlight = { "Whitespace" }
+            },
             scope = {
                 show_start = true,
-                show_end = true,
-                highlight = { "Keyword" }
+                highlight = { "Statement" }
             },
             whitespace = {
                 highlight = { "Whitespace" }
-            },
-            indent = {
-                highlight = { "Comment" }
-            },
-
+            }
         }
     },
     {
@@ -212,6 +212,12 @@ return {
         keys = {
             { '<leader>u', vim.cmd.UndotreeToggle, silent = true, noremap = true, desc = "Open UndoTree" }
         }
+    },
+    {
+        url = 'https://gitlab.com/HiPhish/rainbow-delimiters.nvim',
+        config = function()
+            require('rainbow-delimiters.setup').setup {}
+        end
     }
     -- }}}
 }

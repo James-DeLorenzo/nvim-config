@@ -16,15 +16,20 @@ return {
         }
     },
     {
-        'kkharji/lspsaga.nvim',
-        dependencies = { 'neovim/nvim-lspconfig' },
-        cmd = "Lspsaga",
+        -- 'kkharji/lspsaga.nvim',
+        'nvimdev/lspsaga.nvim',
+        -- after = 'neovim/nvim-lspconfig',
+        event = 'LspAttach',
+        dependencies = {
+            'nvim-treesitter/nvim-treesitter', -- optional
+            'nvim-tree/nvim-web-devicons'      -- optional
+        },
         keys = {
-            { '<F2>',  '<CMD>Lspsaga rename<CR>',     silent = true, noremap = true },
-            { '<F24>', '<CMD>Lspsaga lsp_finder<CR>', silent = true, noremap = true },
+            { '<F2>',  '<CMD>Lspsaga rename<CR>', silent = true, noremap = true },
+            { '<F24>', '<CMD>Lspsaga Finder<CR>', silent = true, noremap = true },
         },
         config = function()
-            require('lspsaga').init_lsp_saga()
+            require('lspsaga').setup {}
         end
     },
     -- cmp {{{
