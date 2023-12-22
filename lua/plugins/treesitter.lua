@@ -1,5 +1,8 @@
 return {
     {
+        url = "https://gitlab.com/HiPhish/rainbow-delimiters.nvim",
+    },
+    {
         'nvim-treesitter/nvim-treesitter',
         event = 'BufEnter',
         main = 'nvim-treesitter.configs',
