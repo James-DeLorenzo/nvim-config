@@ -2,7 +2,7 @@ return {
     {
         'romgrk/barbar.nvim',
         event = "BufEnter",
-        dependencies = { 'kyazdani42/nvim-web-devicons' },
+        dependencies = { 'nvim-tree/nvim-web-devicons' },
         keys = {
             { '<Leader>bc', '<CMD>BufferPick<CR>',     silent = true, noremap = true },
             { '<Leader>bq', '<CMD>BufferClose<CR>',    silent = true, noremap = true },

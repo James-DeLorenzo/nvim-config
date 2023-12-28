@@ -1,5 +1,15 @@
 return {
     -- basic nvim plugins {{{
+    'nvim-tree/nvim-web-devicons',
+    'folke/trouble.nvim',
+    {
+        'github/copilot.vim',
+        lazy = false,
+    },
+    {
+        'famiu/bufdelete.nvim',
+        event = 'BufEnter'
+    },
     {
         'ThePrimeagen/vim-be-good',
         cmd = 'VimBeGood'
@@ -23,7 +33,7 @@ return {
         dependencies = {
             'nvim-lua/plenary.nvim',
             'nvim-telescope/telescope.nvim',
-            'kyazdani42/nvim-web-devicons',
+            'nvim-tree/nvim-web-devicons',
         },
         config = function()
             require('octo').setup()
@@ -36,12 +46,6 @@ return {
             { '<leader>gol', "<cmd>CellularAutomaton game_of_life<CR>", noremap = true }
         }
     },
-    'kyazdani42/nvim-web-devicons',
-    {
-        'famiu/bufdelete.nvim',
-        event = 'BufEnter'
-    },
-    'folke/trouble.nvim',
     {
         'lukas-reineke/indent-blankline.nvim',
         main = "ibl",
@@ -222,4 +226,4 @@ return {
     -- }}}
 }
 
--- vim: foldmethod=marker foldlevel=0
+-- vim: foldmethod=marker foldlevel=99
