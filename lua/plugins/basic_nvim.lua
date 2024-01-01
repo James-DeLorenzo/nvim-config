@@ -15,6 +15,54 @@ return {
         cmd = 'VimBeGood'
     },
     {
+        "ThePrimeagen/harpoon",
+        branch = "harpoon2",
+        -- lazy = false,
+        dependencies = { "nvim-lua/plenary.nvim" },
+        -- keys = {
+        --     {},
+        -- }
+        config = function()
+            local harpoon = require("harpoon")
+
+            -- REQUIRED
+            harpoon:setup {}
+            -- REQUIRED
+        end,
+        keys = {
+            {
+                "<leader>ha",
+                function()
+                    local harpoon = require('harpoon'); harpoon:list():append()
+                end,
+                desc = "append to harpoon"
+            },
+            { "<C-a>", function()
+                local harpoon = require('harpoon'); harpoon.ui:toggle_quick_menu(harpoon:list())
+            end },
+            { "<C-A-j>", function()
+                local harpoon = require('harpoon'); harpoon:list():select(1)
+            end },
+            { "<C-A-k>", function()
+                local harpoon = require('harpoon'); harpoon:list():select(2)
+            end },
+            { "<C-A-l>", function()
+                local harpoon = require('harpoon'); harpoon:list():select(3)
+            end },
+            { "<C-A-;>", function()
+                local harpoon = require('harpoon'); harpoon:list():select(4)
+            end },
+            { "<C-A-P>", function()
+                local harpoon = require('harpoon'); harpoon:list():prev()
+            end },
+            { "<C-A-N>", function()
+                local harpoon = require('harpoon'); harpoon:list():next()
+            end },
+            -- Toggle previous & next buffers stored within Harpoon list
+
+        }
+    },
+    {
         "folke/which-key.nvim",
         lazy = false,
         config = function()
@@ -48,7 +96,6 @@ return {
     },
     {
         'lukas-reineke/indent-blankline.nvim',
-        main = "ibl",
         event = 'BufEnter',
         main = "ibl",
         opts = {
