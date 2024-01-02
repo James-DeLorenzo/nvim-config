@@ -15,6 +15,7 @@ return {
             "neovim/nvim-lspconfig"
         }
     },
+
     {
         -- 'kkharji/lspsaga.nvim',
         'nvimdev/lspsaga.nvim',
@@ -48,17 +49,23 @@ return {
             'saadparwaiz1/cmp_luasnip',
             -- extra stuff i'm trying
             'lukas-reineke/cmp-rg',
+            {
+                "zbirenbaum/copilot-cmp",
+                after = { "copilot.lua" }
+            }
         },
         config = function()
             -- Setup nvim-cmp.
             local cmp = require 'cmp'
             local lspkind = require 'lspkind'
+            require('copilot_cmp').setup()
             cmp.setup({
                 formatting = {
                     format = lspkind.cmp_format({
                         mode = 'symbol_text',
                         with_text = true,
                         menu = ({
+                            copilot = "[cop]",
                             nvim_lsp = "[lsp]",
                             buffer = "[Buf]",
                             luasnip = "[snip]",
@@ -96,6 +103,8 @@ return {
                     ['<C-y>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
                 },
                 sources = cmp.config.sources({
+                    -- Copilot Source
+                    { name = "copilot" },
                     { name = 'nvim_lsp' },
                     { name = 'luasnip' },
                     { name = 'nvim_lua' },

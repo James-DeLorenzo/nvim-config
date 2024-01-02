@@ -3,8 +3,15 @@ return {
     'nvim-tree/nvim-web-devicons',
     'folke/trouble.nvim',
     {
-        'github/copilot.vim',
+        'zbirenbaum/copilot.lua',
         lazy = false,
+        main = "copilot",
+        config = function()
+            require('copilot').setup({
+                panel = { enabled = false, },
+                suggestion = { enabled = false, },
+            })
+        end
     },
     {
         'famiu/bufdelete.nvim',
