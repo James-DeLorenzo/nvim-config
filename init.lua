@@ -21,6 +21,9 @@ require("lazy").setup('plugins', {
     },
     checker = {
         frequency = 86400
+    },
+    change_detection = {
+        notify = false,
     }
 })
 -- require('autocommands')
