@@ -68,6 +68,7 @@ utils.inoremap('<Right>', '<Nop>')
 -- }}}
 -- Change leader key
 utils.nmap('<Space>', '<Nop>')
+utils.nmap('Q', '<Nop>')
 utils.map({ 'n', 'i' }, '<F1>', '<Nop>')
 
 -- lspSaga stuffs {{{
