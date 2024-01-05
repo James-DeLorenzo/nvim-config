@@ -26,11 +26,8 @@ require("lazy").setup('plugins', {
         notify = false,
     }
 })
--- require('autocommands')
+require('setups.autocommands')
 require('setups.keybinds')
--- plugin customizations
--- require('setups.feline_setup')
--- require('setups.heirline_setup')
 require('setups.lsp_setup')
 require('setups.treesitter-extras')
 

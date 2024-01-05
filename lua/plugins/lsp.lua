@@ -1,5 +1,7 @@
 return {
-    "folke/neodev.nvim",
+    {
+        "folke/neodev.nvim",
+    },
     {
         'williamboman/mason.nvim',
         cmd = 'Mason',
@@ -17,7 +19,6 @@ return {
     },
 
     {
-        -- 'kkharji/lspsaga.nvim',
         'nvimdev/lspsaga.nvim',
         -- after = 'neovim/nvim-lspconfig',
         event = 'LspAttach',
@@ -29,9 +30,9 @@ return {
             { '<F2>',  '<CMD>Lspsaga rename<CR>', silent = true, noremap = true },
             { '<F24>', '<CMD>Lspsaga Finder<CR>', silent = true, noremap = true },
         },
-        config = function()
-            require('lspsaga').setup {}
-        end
+        opts = {
+            symbol_in_winbar = { enable = false },
+        }
     },
     -- cmp {{{
     {

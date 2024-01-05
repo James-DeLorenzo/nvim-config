@@ -71,10 +71,6 @@ utils.nmap('<Space>', '<Nop>')
 utils.nmap('Q', '<Nop>')
 utils.map({ 'n', 'i' }, '<F1>', '<Nop>')
 
--- lspSaga stuffs {{{
-utils.noremap({ 'n', 'i' }, '<C-S-SPACE>', vim.lsp.buf.signature_help)
--- }}}
-
 -- window movement {{{
 if vim.fn.has('macunix') == 1 then
     utils.nnoremap('∆', '<c-w>j', { silent = true })
@@ -89,9 +85,13 @@ else
 end
 -- }}}
 
+--page moves
 vim.keymap.set("n", "<c-D>", "<c-D>zz")
 vim.keymap.set("n", "<c-U>", "<c-U>zz")
 
+--visual move sections
+vim.keymap.set({ "v" }, "<c-j>", ":m '>+1<CR>gv=gv")
+vim.keymap.set({ "v" }, "<c-k>", ":m '<-2<CR>gv=gv")
 -- greatest remap ever
 vim.keymap.set("x", "<leader>p", [["_dP]])
 

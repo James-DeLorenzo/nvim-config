@@ -15,9 +15,9 @@ return {
             highlight_alternate = true,
             icons = {
                 button = false,
-                modified = {
-                    button = false
-                },
+                --modified = {
+                --    button = false
+                --},
                 diagnostics = {
                     [vim.diagnostic.severity.ERROR] = { enabled = true },
                     [vim.diagnostic.severity.WARN] = { enabled = true },

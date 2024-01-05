@@ -1,17 +1,66 @@
 return {
     -- basic nvim plugins {{{
     'nvim-tree/nvim-web-devicons',
-    'folke/trouble.nvim',
+    {
+        'folke/trouble.nvim',
+        event = "VeryLazy",
+        dependencies = { "nvim-tree/nvim-web-devicons" },
+        opts = {},
+        keys = {
+            { '<leader>xx', function() require('trouble').toggle() end },
+            { '<leader>xq', function() require('trouble').toggle("quickfix") end },
+            { '<leader>xl', function() require('trouble').toggle("loclist") end },
+            { '<leader>xw', function() require('trouble').toggle("lsp_workspace_diagnostics") end },
+            { '<leader>xd', function() require('trouble').toggle("lsp_document_diagnostics") end },
+        }
+    },
+    {
+        "folke/zen-mode.nvim",
+        dependencies = {
+            { 'folke/twilight.nvim', opts = { dimming = { alpha = .4 }, context = 20 } }
+        },
+        keys = {
+            { "<leader>zz", "<cmd>ZenMode<CR>", desc = "Zen Mode" },
+        },
+        opts = {
+            window = {
+                options = {
+                    foldcolumn = '0',
+                }
+            },
+            plugins = {
+                options = {
+                    showcmd = 0,
+                },
+                gitsigns = { enabled = false },
+            },
+        }
+    },
+    {
+        "folke/persistence.nvim",
+        enabled = false,
+        -- lazy = false,
+        keys = {
+            { '<leader>qs', function() require("persistence").load() end },
+        }
+        -- event = "VimEnter",
+        -- config = function()
+        --     require("persistence").setup {}
+        --     vim.api.nvim_create_autocmd("VimEnter", {
+        --         group = vim.api.nvim_create_augroup("persistencegroup", { clear = true }),
+        --         callback = function()
+        --             require("persistence").load()
+        --         end,
+        --     })
+        -- end
+    },
     {
         'zbirenbaum/copilot.lua',
         lazy = false,
-        main = "copilot",
-        config = function()
-            require('copilot').setup({
-                panel = { enabled = false, },
-                suggestion = { enabled = false, },
-            })
-        end
+        opts = {
+            panel = { enabled = false, },
+            suggestion = { enabled = false, },
+        }
     },
     {
         'famiu/bufdelete.nvim',
@@ -24,11 +73,7 @@ return {
     {
         "ThePrimeagen/harpoon",
         branch = "harpoon2",
-        -- lazy = false,
         dependencies = { "nvim-lua/plenary.nvim" },
-        -- keys = {
-        --     {},
-        -- }
         config = function()
             local harpoon = require("harpoon")
 
@@ -44,7 +89,7 @@ return {
                 end,
                 desc = "append to harpoon"
             },
-            { "<C-a>", function()
+            { "<leader>ho", function()
                 local harpoon = require('harpoon'); harpoon.ui:toggle_quick_menu(harpoon:list())
             end },
             { "<C-A-j>", function()
@@ -66,18 +111,16 @@ return {
                 local harpoon = require('harpoon'); harpoon:list():next()
             end },
             -- Toggle previous & next buffers stored within Harpoon list
-
         }
     },
     {
         "folke/which-key.nvim",
-        lazy = false,
-        config = function()
+        event = "VeryLazy",
+        init = function()
             vim.o.timeout = true
             vim.o.timeoutlen = 300
-            require('which-key').setup {
-            }
         end,
+        opts = {}
     },
     {
         'pwntester/octo.nvim',
@@ -90,9 +133,6 @@ return {
             'nvim-telescope/telescope.nvim',
             'nvim-tree/nvim-web-devicons',
         },
-        config = function()
-            require('octo').setup()
-        end
     },
     {
         'eandrju/cellular-automaton.nvim',
@@ -103,6 +143,7 @@ return {
     },
     {
         'lukas-reineke/indent-blankline.nvim',
+        --enabled = false,
         event = 'BufEnter',
         main = "ibl",
         opts = {
@@ -130,16 +171,12 @@ return {
         "kylechui/nvim-surround",
         version = "*", -- Use for stability; omit to use `main` branch for the latest features
         event = "VeryLazy",
-        config = function()
-            require("nvim-surround").setup({})
-        end
+        opts = {}
     },
     {
         'windwp/nvim-autopairs',
         event = 'BufReadPost',
-        config = function()
-            require('nvim-autopairs').setup()
-        end
+        opts = {}
     },
     {
         'lewis6991/gitsigns.nvim',
@@ -163,11 +200,7 @@ return {
     {
         'numToStr/Comment.nvim',
         event = 'BufReadPost',
-        config = function()
-            require('Comment').setup {}
-            --     local ft = require('Comment.ft')
-            --     ft.terraform = '#%s'
-        end
+        opts = {}
     },
     {
         'gelguy/wilder.nvim',
@@ -261,6 +294,7 @@ return {
     },
     {
         'norcalli/nvim-colorizer.lua',
+        event = 'BufReadPost',
         config = function()
             require('colorizer').setup({ '*', }, { names = false, RRGGBBAA = true, })
         end
@@ -271,12 +305,6 @@ return {
             { '<leader>u', vim.cmd.UndotreeToggle, silent = true, noremap = true, desc = "Open UndoTree" }
         }
     },
-    {
-        url = 'https://gitlab.com/HiPhish/rainbow-delimiters.nvim',
-        config = function()
-            require('rainbow-delimiters.setup').setup {}
-        end
-    }
     -- }}}
 }
 

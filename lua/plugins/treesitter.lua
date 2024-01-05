@@ -1,6 +1,9 @@
 return {
     {
-        url = "https://gitlab.com/HiPhish/rainbow-delimiters.nvim",
+        url = 'https://gitlab.com/HiPhish/rainbow-delimiters.nvim',
+        main = 'rainbow-delimiters.setup',
+        event = 'BufReadPost',
+
     },
     {
         'nvim-treesitter/nvim-treesitter',
@@ -31,15 +34,8 @@ return {
                     clear_on_cursor_move = true,
                 },
                 highlight_current_scope = { enable = false },
-                smart_rename = {
-                    enable = true,
-                    -- keymaps = {
-                    --     smart_rename = "grr"
-                    -- }
-                },
-                navigation = {
-                    enable = true
-                }
+                smart_rename = { enable = false },
+                navigation = { enable = false }
             },
             -- playground
             playground = {
