@@ -7,7 +7,8 @@ return {
     },
     {
         'uloco/bluloco.nvim',
-        lazy = false,
+        -- lazy = false,
+        event = "VimEnter",
         priority = 1000,
         dependencies = { 'rktjmp/lush.nvim' },
         opts = {
