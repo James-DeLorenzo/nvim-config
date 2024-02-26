@@ -55,8 +55,14 @@ return {
         -- end
     },
     {
+        'github/copilot.vim',
+        lazy = false,
+        enabled = vim.fn.has("macunix") == 1,
+    },
+    {
         'zbirenbaum/copilot.lua',
         lazy = false,
+        enabled = vim.fn.has("macunix") ~= 1,
         opts = {
             panel = { enabled = false, },
             suggestion = { enabled = false, },

@@ -52,6 +52,7 @@ return {
             'lukas-reineke/cmp-rg',
             {
                 "zbirenbaum/copilot-cmp",
+                enabled = vim.fn.has("macunix") ~= 1,
                 after = { "copilot.lua" }
             }
         },
@@ -59,7 +60,10 @@ return {
             -- Setup nvim-cmp.
             local cmp = require 'cmp'
             local lspkind = require 'lspkind'
-            require('copilot_cmp').setup()
+            local mok, cp = pcall(require, 'copilot_cmp')
+            if mok then
+                cp.setup()
+            end
             cmp.setup({
                 formatting = {
                     format = lspkind.cmp_format({
@@ -73,7 +77,6 @@ return {
                             nvim_lua = "[lua]",
                             rg = "[RG]",
                             path = "[Path]"
-
                         })
                     })
                 },
