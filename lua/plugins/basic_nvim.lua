@@ -1,5 +1,6 @@
 return {
     -- basic nvim plugins {{{
+    'theKnightsOfRohan/csvlens.nvim',
     'nvim-tree/nvim-web-devicons',
     {
         'folke/trouble.nvim',
@@ -55,17 +56,19 @@ return {
         -- end
     },
     {
-        'github/copilot.vim',
-        lazy = false,
-        enabled = vim.fn.has("macunix") == 1,
-    },
-    {
         'zbirenbaum/copilot.lua',
-        lazy = false,
-        enabled = vim.fn.has("macunix") ~= 1,
+        event = "UIEnter",
         opts = {
             panel = { enabled = false, },
             suggestion = { enabled = false, },
+            filetypes = {
+                help = false,
+                gitcommit = false,
+                gitrebase = false,
+                cvs = false,
+                ["."] = false,
+                ["*"] = true,
+            },
         }
     },
     {

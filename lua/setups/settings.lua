@@ -1,3 +1,4 @@
+vim.o.exrc           = true
 vim.o.syntax         = 'enable'
 vim.o.background     = 'dark'
 vim.o.colorcolumn    = "80,100,120,200"

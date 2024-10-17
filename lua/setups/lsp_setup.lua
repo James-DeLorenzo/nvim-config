@@ -99,6 +99,9 @@ mason_lsp.setup_handlers {
             capabilities = capabilities,
             settings = {
                 python = {
+                    editor = {
+                        defaultformatter = "autopep8",
+                    },
                     venvPath = "/Users/james.delorenzo/.local/share/virtualenvs/",
                     analysis = {
                         diagnosticSeverityOverrides = {
@@ -132,11 +135,75 @@ mason_lsp.setup_handlers {
             end
         }
     end,
+    ["yamlls"] = function()
+        lspconfig.yamlls.setup {
+            capabilities = capabilities,
+            settings = {
+                yaml = {
+                    schemaStore = {
+                        enable = true,
+                        url = "https://www.schemastore.org/api/json/catalog.json",
+                    },
+                },
+                redhat = {
+                    telemetry = {
+                        enabled = false,
+                    },
+                },
+            },
+            on_attach = function(client, bufnr)
+                set_keys(bufnr)
+                if client.server_capabilities.documentSymbolProvider then
+                    navic.attach(client, bufnr)
+                end
+            end
+        }
+    end,
+}
+-- Utilities for creating configurations
+local fuok, util = pcall(require, 'formatter.util')
+if not fuok then
+    print("formatter was not loaded, skipping lsp setup...")
+    return
+else
+end
+
+local fok, formatter = pcall(require, 'formatter')
+if not fok then
+    print("formatter was not loaded, skipping lsp setup...")
+    return
+else
+end
+-- Provides the Format, FormatWrite, FormatLock, and FormatWriteLock commands
+formatter.setup {
+    -- Enable or disable logging
+    logging = true,
+    -- Set the log level
+    log_level = vim.log.levels.INFO,
+    -- All formatter configurations are opt-in
+    filetype = {
+        python = {
+            require("formatter.filetypes.python").black()
+        },
+        ["*"] = {
+            -- "formatter.filetypes.any" defines default configurations for any
+            -- filetype
+            -- require("formatter.filetypes.any").remove_trailing_whitespace,
+            function()
+                -- Ignore already configured types.
+                local defined_types = require("formatter.config").values.filetype
+                if defined_types[vim.bo.filetype] ~= nil then
+                    return nil
+                end
+                vim.lsp.buf.format()
+            end,
+        }
+    }
 }
 
 vim.cmd([[
     augroup Format
         autocmd!
-        autocmd BufWritePre * lua vim.lsp.buf.format()
+        autocmd BufWritePre * FormatWriteLock
     augroup end
 ]])

@@ -119,22 +119,22 @@ local function get_vi_color()
     return mode_colors[vim.fn.mode(1):sub(1, 1)]
 end
 
-local function get_vi_blocks(seps, middle_provider, final_color)
-    return {
-        -- file name with vi color
-        get_left_sep(seps and seps[1] or nil, function()
-            return { fg = get_vi_color()
-            }
-        end),
-        { provider = middle_provider, hl = function() return { bg = get_vi_color() } end
-        },
-        get_right_sep(seps and seps[2] or nil, function()
-            return { fg = get_vi_color(), bg = final_color
-            }
-        end),
-        update = { "ModeChanged" }
-    }
-end
+-- local function get_vi_blocks(seps, middle_provider, final_color)
+--     return {
+--         -- file name with vi color
+--         get_left_sep(seps and seps[1] or nil, function()
+--             return { fg = get_vi_color()
+--             }
+--         end),
+--         { provider = middle_provider, hl = function() return { bg = get_vi_color() } end
+--         },
+--         get_right_sep(seps and seps[2] or nil, function()
+--             return { fg = get_vi_color(), bg = final_color
+--             }
+--         end),
+--         update = { "ModeChanged" }
+--     }
+-- end
 
 -- }}}
 
@@ -239,8 +239,8 @@ local filename = {
             local cwd = vim.fn.getcwd(0)
             cwd = vim.fn.fnamemodify(cwd, ":~:.")
             local filepath = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ":~:.")
-            filepath = vim.fn.substitute(filepath, cwd, '', '')
-            filepath = vim.fn.substitute(filepath, "~", '', '')
+            -- filepath = vim.fn.substitute(filepath, cwd, '', '')
+            -- filepath = vim.fn.substitute(filepath, "~", '', '')
             if not conditions.width_percent_below(#cwd, 0.25) then
                 filepath = vim.fn.pathshorten(filepath)
             end

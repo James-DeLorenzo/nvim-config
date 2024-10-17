@@ -11,6 +11,7 @@ return {
             'neovim/nvim-lspconfig'
         }
     },
+    { 'mhartington/formatter.nvim' },
     {
         'SmiteshP/nvim-navic',
         dependencies = {
@@ -52,7 +53,7 @@ return {
             'lukas-reineke/cmp-rg',
             {
                 "zbirenbaum/copilot-cmp",
-                enabled = vim.fn.has("macunix") ~= 1,
+                -- enabled = vim.fn.has("macunix") ~= 1,
                 after = { "copilot.lua" }
             }
         },
